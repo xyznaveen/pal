@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
@@ -12,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import np.com.naveenniraula.ghadi.R
 import np.com.naveenniraula.ghadi.data.DateItem
+import np.com.naveenniraula.ghadi.listeners.GhadiInteractionCompleteListener
 import np.com.naveenniraula.ghadi.miti.Date
 import np.com.naveenniraula.ghadi.miti.DateUtils
 import java.util.*
@@ -23,6 +27,8 @@ class GhadiPickerFragment : DialogFragment() {
     }
 
     private lateinit var viewModel: GhadiPickerViewModel
+    private val adapter = NepaliDateAdapter<DateItem>()
+    private lateinit var ghadiInteractionCompleteListener: GhadiInteractionCompleteListener
 
     private lateinit var alertDialog: AlertDialog
     private lateinit var rootView: View
@@ -38,6 +44,10 @@ class GhadiPickerFragment : DialogFragment() {
             rootView = inflater.inflate(R.layout.ghadi_picker_fragment, null, false)
 
             setupNepaliDate()
+
+            setupActionButtonListeners()
+            setupMonthButtonListeners()
+            setupYearButtonListeners()
 
             val builder = AlertDialog.Builder(it)
             builder.setView(rootView)
@@ -58,9 +68,51 @@ class GhadiPickerFragment : DialogFragment() {
         } ?: return super.onCreateDialog(savedInstanceState)
     }
 
+    private fun setupYearButtonListeners() {
+
+        val year = getRootView().findViewById<TextView>(R.id.gpfYear)
+
+        val next = getRootView().findViewById<ImageButton>(R.id.gpfPrevYear)
+        next.setOnClickListener {
+            year.text = (year.text.toString().toInt() - 1).toString()
+        }
+
+        val prev = getRootView().findViewById<ImageButton>(R.id.gpfNextYear)
+        prev.setOnClickListener {
+            year.text = (year.text.toString().toInt() + 1).toString()
+        }
+    }
+
+    private fun setupMonthButtonListeners() {
+
+        val month = getRootView().findViewById<TextView>(R.id.gpfMonth)
+
+        val next = getRootView().findViewById<ImageButton>(R.id.gpfNextMonth)
+        next.setOnClickListener {
+            month.text = DateUtils.getNextMonthName(month.text.toString())
+        }
+
+        val prev = getRootView().findViewById<ImageButton>(R.id.gpfPrevMonth)
+        prev.setOnClickListener {
+            month.text = DateUtils.getPreviousMonthName(month.text.toString())
+        }
+    }
+
+    private fun setupActionButtonListeners() {
+
+        val confirm = getRootView().findViewById<Button>(R.id.gpfConfirm)
+        confirm.setOnClickListener {
+            Log.i("BQ7CH72", "Selected Date :: ${adapter.getSelectedDate()}")
+            dismiss()
+        }
+        val cancel = getRootView().findViewById<Button>(R.id.gpfCancel)
+        cancel.setOnClickListener {
+            dismiss()
+        }
+    }
+
     private fun setupNepaliDate() {
 
-        val adapter = NepaliDateAdapter<DateItem>()
         adapter.setDataList(prepareFakeData())
 
         val recyclerView = getRootView().findViewById<RecyclerView>(R.id.nepaliDateList)
@@ -69,7 +121,10 @@ class GhadiPickerFragment : DialogFragment() {
         recyclerView.layoutManager = GridLayoutManager(context, 7)
 
         identifyNepaliDateStart()
+    }
 
+    fun setGhadiInteractionCompleteListener(ghadiInteractionCompleteListener: GhadiInteractionCompleteListener) {
+        this.ghadiInteractionCompleteListener = ghadiInteractionCompleteListener
     }
 
     private fun identifyNepaliDateStart() {
@@ -77,9 +132,7 @@ class GhadiPickerFragment : DialogFragment() {
 
     }
 
-    private fun prepareFakeData(): ArrayList<DateItem> {
-
-        val date = Date(Calendar.getInstance())
+    private fun prepareFakeData(date: Date = Date(Calendar.getInstance())): ArrayList<DateItem> {
 
         val list = ArrayList<DateItem>()
         list.add(DateItem("S"))
@@ -91,7 +144,7 @@ class GhadiPickerFragment : DialogFragment() {
         list.add(DateItem("S"))
 
         // today's date in ad
-        val englishDate = Date(Calendar.getInstance())
+        val englishDate = date
         // today's date in bs
         val nepaliDate = englishDate.convertToNepali()
         // 1 gatey in ad
@@ -101,11 +154,6 @@ class GhadiPickerFragment : DialogFragment() {
 
         val daysCounter = 1 - (7 - nepMonthSuruVayekoEnglishDate.weekDayNum)
 
-        Log.i(
-            "BQ7CH72",
-            "Month start on :: ${DateUtils.getDayName(nepMonthSuruVayekoEnglishDate.weekDayNum)} ${nepMonthSuruVayekoEnglishDate.weekDayNum}"
-        )
-
         for (i in (2 - nepMonthSuruVayekoEnglishDate.weekDayNum)..numberOfDaysInMonth) {
 
             val model = DateItem("$i")
@@ -113,6 +161,8 @@ class GhadiPickerFragment : DialogFragment() {
             if (i >= 1) {
                 // clickable only if the model contains actual date
                 model.isClickable = true
+                model.month = nepaliDate.month.toString()
+                model.year = nepaliDate.year.toString()
             }
 
             model.isToday = (nepaliDate.day == i)

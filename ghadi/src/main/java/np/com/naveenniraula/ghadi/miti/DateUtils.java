@@ -6,116 +6,119 @@ import java.util.Calendar;
  * Nepali date conversion utilities and database.
  */
 public class DateUtils {
-    /// Starting Nepali year that this database starts storing date from.
+    // Name of the month
+    public final static String[] MONTH_NAMES = {"", "Baisakh", "Jestha", "Ashar", "Shrawan", "Bhadra", "Ashoj", "Kartik", "Mangshir", "Poush", "Magh", "Falgun", "Chaitra"};
+    public final static String[] WEEK_DAY_NAMES = {"", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+    // Starting Nepali year that this database starts storing date from.
     public final static int startNepaliYear = 2000;
-    /// Starting English year that this database starts storing date from.
+    // Starting English year that this database starts storing date from.
     public final static Date startEnglishDate = new Date(1943, 4, 14);
 
     /**
      * Date Database useful for converting from/to Nepali/English dates.
-     *
+     * <p>
      * Basically, this is an array of arrays. Each sub-array represents a year.
      * Each year contains number of days in each month as array of integers.
      */
-    public final static int[][] data = new int[][] {
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 32, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {30, 32, 31, 32, 31, 31, 29, 30, 30, 29, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 32, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {30, 32, 31, 32, 31, 31, 29, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 29, 31},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
-            new int[] {31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
-            new int[] {31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
-            new int[] {31, 31, 32, 32, 31, 30, 30, 30, 29, 30, 30, 30},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 30, 30, 30, 29, 30, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 30, 30, 30, 29, 30, 30, 30},
-            new int[] {31, 32, 31, 32, 30, 31, 30, 30, 29, 30, 30, 30},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
-            new int[] {31, 31, 32, 31, 31, 31, 30, 30, 29, 30, 30, 30},
-            new int[] {30, 31, 32, 32, 30, 31, 30, 30, 29, 30, 30, 30},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
-            new int[] {30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
+    public final static int[][] data = new int[][]{
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 32, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{30, 32, 31, 32, 31, 31, 29, 30, 30, 29, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 32, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{30, 32, 31, 32, 31, 31, 29, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 29, 31},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 29, 30, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 30, 29, 31},
+            new int[]{31, 31, 31, 32, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 29, 30, 29, 30, 30},
+            new int[]{31, 32, 31, 32, 31, 30, 30, 30, 29, 29, 30, 30},
+            new int[]{31, 31, 32, 32, 31, 30, 30, 30, 29, 30, 30, 30},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 30, 30, 30, 29, 30, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 30, 30, 30, 29, 30, 30, 30},
+            new int[]{31, 32, 31, 32, 30, 31, 30, 30, 29, 30, 30, 30},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
+            new int[]{31, 31, 32, 31, 31, 31, 30, 30, 29, 30, 30, 30},
+            new int[]{30, 31, 32, 32, 30, 31, 30, 30, 29, 30, 30, 30},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
+            new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
     };
 
     /**
      * Get {@return number of days} in given {@param year} and {@param month}.
      */
     public static int getNumDays(int year, int month) {
-        return data[year-startNepaliYear][month-1];
+        return data[year - startNepaliYear][month - 1];
     }
 
     /**
@@ -127,18 +130,19 @@ public class DateUtils {
 
     /**
      * Convert English date to Nepali date.
+     *
      * @param engDate English date to convert from.
      * @return Corresponding Nepali date.
      */
     public static Date getNepaliDate(Date engDate) {
         int days = startEnglishDate.getDaysTill(engDate) + 1;
 
-        for (int i=0; i<getNumYears(); ++i) {
-            for (int j=0; j<12; ++j) {
+        for (int i = 0; i < getNumYears(); ++i) {
+            for (int j = 0; j < 12; ++j) {
                 if (days > data[i][j])
                     days -= data[i][j];
                 else
-                    return new Date(i+startNepaliYear, j+1, days);
+                    return new Date(i + startNepaliYear, j + 1, days);
             }
         }
         return null;
@@ -146,6 +150,7 @@ public class DateUtils {
 
     /**
      * Convert Nepali date to English date.
+     *
      * @param nepDate Nepali date to convert from.
      * @return Corresponding English date.
      */
@@ -153,16 +158,15 @@ public class DateUtils {
         int days = 0;
         int year = nepDate.year - startNepaliYear;
 
-        for (int i=0; i<=year; ++i) {
-            for (int j=0; j<12; ++j) {
-                if (i == year && j == nepDate.month-1) {
+        for (int i = 0; i <= year; ++i) {
+            for (int j = 0; j < 12; ++j) {
+                if (i == year && j == nepDate.month - 1) {
                     days += nepDate.day - 1;
 
                     Calendar c = startEnglishDate.getCalendar();
                     c.add(Calendar.DATE, days);
                     return new Date(c);
-                }
-                else
+                } else
                     days += data[i][j];
             }
         }
@@ -170,25 +174,50 @@ public class DateUtils {
     }
 
     public static String getDayName(int dayOfWeek) {
-        String result = "";
-
-        if(dayOfWeek == 1) {
-            result = "Sunday";
-        } else if(dayOfWeek == 2) {
-            result = "Monday";
-        } else if(dayOfWeek == 3) {
-            result = "Tuesday";
-        } else if(dayOfWeek == 4) {
-            result = "Wednesday";
-        } else if(dayOfWeek == 5) {
-            result = "Thursday";
-        } else if(dayOfWeek == 6) {
-            result = "Friday";
-        } else if(dayOfWeek == 7) {
-            result = "Saturday";
+        if (dayOfWeek < 1 || dayOfWeek > 7) {
+            return "";
         }
+        return WEEK_DAY_NAMES[dayOfWeek];
+    }
 
+    public static String getMonthName(int monthNumber) {
+        if (monthNumber < 1 || monthNumber > 12) {
+            return MONTH_NAMES[0];
+        }
+        return MONTH_NAMES[monthNumber];
+    }
+
+    public static int getMonthNumber(String monthName) {
+        int result = 0;
+        for (int i = 0; i < MONTH_NAMES.length; i++) {
+            if (MONTH_NAMES[i].equals(monthName)) {
+                result = i;
+                break;
+            }
+        }
         return result;
+    }
+
+    public static String getNextMonthName(String monthName) {
+        int month = getMonthNumber(monthName) + 1;
+        if (month > 12) {
+            month = 1;
+        }
+        return getMonthName(month);
+    }
+
+    /**
+     * Provides name of the next month in BS.
+     *
+     * @param monthName
+     * @return
+     */
+    public static String getPreviousMonthName(String monthName) {
+        int month = getMonthNumber(monthName) - 1;
+        if (month < 1) {
+            month = 12;
+        }
+        return getMonthName(month);
     }
 
 }

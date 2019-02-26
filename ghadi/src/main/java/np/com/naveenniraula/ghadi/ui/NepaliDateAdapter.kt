@@ -17,11 +17,12 @@ import java.util.*
 class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
     private var dataList: ArrayList<T> = arrayListOf()
-    private var isCalledFromOnCreateViewHolder = true
+    private lateinit var selectedDate: DateItem
 
     private val ghadiCellInteractionListener: GhadiCellInteractionListener = object : GhadiCellInteractionListener {
         override fun OnCellClicked(position: Int) {
             changeClickState(position)
+            selectedDate = dataList[position] as DateItem
         }
     }
 
@@ -42,13 +43,16 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         notifyItemChanged(position)
 
         NepaliDateAdapter.lastCellPosition = position
-        Log.i("BQ7CH72", "Before -> current :: ${currentCell.date} last :: 0")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Vh {
 
         val inflater = LayoutInflater.from(parent.context)
         return Vh(inflater.inflate(R.layout.item_date_cell, parent, false))
+    }
+
+    fun getSelectedDate(): DateItem {
+        return selectedDate
     }
 
     private fun selectTodaysDate() {
@@ -97,6 +101,9 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
     }
 
     fun setDataList(data: ArrayList<T>) {
+        dataList.clear()
+        notifyItemRangeRemoved(0, dataList.size)
+
         dataList.addAll(data)
         notifyItemRangeInserted(0, data.size)
     }
