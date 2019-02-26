@@ -28,7 +28,7 @@ class GhadiPickerFragment : DialogFragment() {
     private lateinit var rootView: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
+        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_AppCompat_Dialog_Alert)
         super.onCreate(savedInstanceState)
     }
 
@@ -40,14 +40,13 @@ class GhadiPickerFragment : DialogFragment() {
             setupNepaliDate()
 
             val builder = AlertDialog.Builder(it)
-            builder.setTitle(R.string.app_name)
             builder.setView(rootView)
-            builder.setPositiveButton(R.string.app_name) { _, _ ->
-                dismiss()
-            }
-            builder.setNegativeButton(R.string.app_name) { _, _ ->
-                dismiss()
-            }
+            //builder.setPositiveButton("Done") { _, _ ->
+            //    dismiss()
+            //}
+            //builder.setNegativeButton("Cancel") { _, _ ->
+            //    dismiss()
+            //}
 
             val height = activity?.window?.decorView?.height ?: 0
             val width = activity?.window?.decorView?.width ?: 0
@@ -76,7 +75,6 @@ class GhadiPickerFragment : DialogFragment() {
     private fun identifyNepaliDateStart() {
 
 
-
     }
 
     private fun prepareFakeData(): ArrayList<DateItem> {
@@ -84,13 +82,13 @@ class GhadiPickerFragment : DialogFragment() {
         val date = Date(Calendar.getInstance())
 
         val list = ArrayList<DateItem>()
-        list.add(DateItem("Sun"))
-        list.add(DateItem("Mon"))
-        list.add(DateItem("Tue"))
-        list.add(DateItem("Wed"))
-        list.add(DateItem("Thu"))
-        list.add(DateItem("Fri"))
-        list.add(DateItem("Sat"))
+        list.add(DateItem("S"))
+        list.add(DateItem("M"))
+        list.add(DateItem("T"))
+        list.add(DateItem("W"))
+        list.add(DateItem("T"))
+        list.add(DateItem("F"))
+        list.add(DateItem("S"))
 
         // today's date in ad
         val englishDate = Date(Calendar.getInstance())
@@ -101,11 +99,25 @@ class GhadiPickerFragment : DialogFragment() {
         // number of days this month in bs
         val numberOfDaysInMonth = DateUtils.getNumDays(nepaliDate.year, nepaliDate.month)
 
-        val daysCounter = 0 - englishDate.weekDayNum
+        val daysCounter = 1 - (7 - nepMonthSuruVayekoEnglishDate.weekDayNum)
 
-        for (i in daysCounter..numberOfDaysInMonth) {
+        Log.i(
+            "BQ7CH72",
+            "Month start on :: ${DateUtils.getDayName(nepMonthSuruVayekoEnglishDate.weekDayNum)} ${nepMonthSuruVayekoEnglishDate.weekDayNum}"
+        )
 
-            list.add(DateItem("$i"))
+        for (i in (2 - nepMonthSuruVayekoEnglishDate.weekDayNum)..numberOfDaysInMonth) {
+
+            val model = DateItem("$i")
+
+            if (i >= 1) {
+                // clickable only if the model contains actual date
+                model.isClickable = true
+            }
+
+            model.isToday = (nepaliDate.day == i)
+
+            list.add(model)
         }
 
         return list

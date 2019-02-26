@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" android:id="@+id/gpfRoot">
 
@@ -8,6 +9,98 @@
             android:layout_width="match_parent"
             android:layout_centerInParent="true"
             android:layout_height="wrap_content"
-            android:id="@+id/nepaliDateList"/>
+            android:id="@+id/nepaliDateList"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gpfMonth"
+    />
+    <TextView
+            android:text="2075"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:textColor="@android:color/white"
+            android:padding="16dp"
+            android:background="@android:color/black"
+            android:layout_height="wrap_content"
+            android:id="@+id/gpfYear"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            android:textSize="30sp" android:textAlignment="center"/>
+    <TextView
+            android:text="Magh"
+            android:layout_width="0dp"
+            android:background="#7f8c8d"
+            android:textAllCaps="true"
+            android:padding="12dp"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/gpfMonth"
+            app:layout_constraintTop_toBottomOf="@+id/gpfYear" app:layout_constraintStart_toStartOf="@+id/gpfYear"
+            app:layout_constraintEnd_toEndOf="@+id/gpfYear"/>
+    <ImageButton
+            android:padding="4dp"
+            android:layout_width="48dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_back"
+            android:id="@+id/gpfPrevYear" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/gpfPrevYear"
+            app:layout_constraintTop_toTopOf="@+id/gpfYear"/>
+    <ImageButton
+            android:padding="4dp"
+            android:layout_width="48dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_next"
+            android:id="@+id/gpfPrevYear"
+            app:layout_constraintTop_toTopOf="@+id/gpfYear" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/gpfMonth"/>
+    <ImageButton
+            android:layout_width="48dp"
+            android:padding="4dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_next"
+            android:id="@+id/gpfNextMonth"
+            app:layout_constraintTop_toTopOf="@+id/gpfMonth" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/gpfMonth"
+    />
+    <ImageButton
+            android:layout_width="48dp"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            android:padding="4dp"
+            android:layout_height="0dp" app:srcCompat="@drawable/ic_back"
+            android:id="@+id/gpfPrevMonth"
+            app:layout_constraintTop_toTopOf="@+id/gpfMonth"
+            app:layout_constraintBottom_toBottomOf="@+id/gpfMonth"
+            app:layout_constraintStart_toStartOf="@+id/gpfMonth"
+    />
+    <Button
+            android:text="Cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/black"
+            android:textColor="@android:color/white"
+            android:id="@+id/gpfCancel"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            app:layout_constraintTop_toBottomOf="@+id/nepaliDateList"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="@+id/nepaliDateList"
+            app:layout_constraintEnd_toStartOf="@+id/view"
+            android:layout_marginStart="1dp" android:layout_marginBottom="1dp" android:layout_marginTop="1dp"/>
+    <View android:layout_width="1dp" app:layout_constraintEnd_toEndOf="parent"
+          android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+          android:layout_marginStart="8dp"
+          app:layout_constraintBottom_toBottomOf="parent" android:id="@+id/view" android:layout_height="1dp"/>
+    <Button
+            android:text="Confirm"
+            android:background="@android:color/black"
+            android:layout_width="0dp"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:id="@+id/gpfConfirm"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
+            app:layout_constraintTop_toBottomOf="@+id/nepaliDateList"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/view"
+            android:layout_marginEnd="1dp" android:layout_marginBottom="1dp" android:layout_marginTop="1dp"/>
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
