@@ -1,8 +1,8 @@
 package np.com.naveenniraula.ghadi.listeners
 
-import np.com.naveenniraula.ghadi.miti.Date
+import np.com.naveenniraula.ghadi.data.GhadiResult
 
 interface GhadiInteractionCompleteListener {
-    fun onDateSelectionComplete(date: Date)
-    fun onDateSelectionCancelled(date: Date)
+    fun onDateSelectionComplete(result: GhadiResult)
+    fun onDateSelectionCancelled(result: GhadiResult)
 }

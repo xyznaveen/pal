@@ -7,48 +7,25 @@
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_centerInParent="true"
             android:layout_height="0dp"
             android:id="@+id/nepaliDateList"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gpfMonth"/>
-    <TextView
-            android:text="2075"
-            android:gravity="center"
-            android:layout_width="0dp"
-            android:textColor="@android:color/white"
-            android:padding="16dp"
-            android:background="@android:color/black"
-            android:layout_height="wrap_content"
-            android:id="@+id/gpfYear"
-            android:textSize="30sp" android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-    <TextView
-            android:text="Magh"
-            android:layout_width="0dp"
-            android:background="#7f8c8d"
-            android:textAllCaps="true"
-            android:padding="12dp"
-            android:textColor="@android:color/white"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:id="@+id/gpfMonth"
-            app:layout_constraintTop_toBottomOf="@+id/gpfYear" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
 
     <!--START: Year Button-->
     <ImageButton
+            android:elevation="4dp"
             android:padding="4dp"
             android:layout_width="48dp"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_height="0dp" app:srcCompat="@drawable/ic_back"
             android:id="@+id/gpfPrevYear"
             app:layout_constraintTop_toTopOf="@+id/gpfYear"
-            app:layout_constraintBottom_toTopOf="@+id/gpfMonth" app:layout_constraintStart_toStartOf="parent"
-    />
+            app:layout_constraintBottom_toTopOf="@+id/gpfMonth" app:layout_constraintStart_toStartOf="parent"/>
+
     <ImageButton
+            android:elevation="4dp"
             android:padding="4dp"
             android:layout_width="48dp"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
@@ -59,8 +36,23 @@
             app:layout_constraintBottom_toTopOf="@+id/gpfPrevMonth"/>
     <!--END: Year Button-->
 
+    <TextView
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:textColor="@android:color/white"
+            android:padding="16dp"
+            android:background="@android:color/black"
+            android:layout_height="wrap_content"
+            android:id="@+id/gpfYear"
+            android:textSize="30sp" android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
     <!--START: Month Buttons-->
     <ImageButton
+            android:elevation="4dp"
             android:layout_width="48dp"
             android:padding="4dp"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
@@ -69,6 +61,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/gpfMonth" app:layout_constraintBottom_toBottomOf="@+id/gpfMonth"/>
     <ImageButton
+            android:elevation="4dp"
             android:layout_width="48dp"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:padding="4dp"
@@ -77,6 +70,18 @@
             app:layout_constraintTop_toTopOf="@+id/gpfMonth" app:layout_constraintBottom_toBottomOf="@+id/gpfMonth"
             app:layout_constraintStart_toStartOf="parent"/>
     <!--END: Month Buttons-->
+
+    <TextView
+            android:layout_width="0dp"
+            android:background="#7f8c8d"
+            android:textAllCaps="true"
+            android:padding="12dp"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:id="@+id/gpfMonth"
+            app:layout_constraintTop_toBottomOf="@+id/gpfYear" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     <!--START: Action Buttons -->
     <Button
@@ -92,9 +97,10 @@
             app:layout_constraintEnd_toStartOf="@+id/view"
             app:layout_constraintHorizontal_bias="0.0" android:layout_marginTop="1dp"/>
     <View android:layout_width="1dp"
-          android:id="@+id/view" android:layout_height="1dp" tools:layout_editor_absoluteY="356dp"
+          android:id="@+id/view" android:layout_height="1dp"
           app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-    />
+          app:layout_constraintTop_toTopOf="@+id/gpfCancel" android:layout_marginBottom="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"/>
     <Button
             android:text="Confirm"
             android:background="@android:color/black"

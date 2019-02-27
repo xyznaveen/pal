@@ -6,5 +6,6 @@ data class DateItem(
     var year: String = "",
     var isToday: Boolean = false,
     var isSelected: Boolean = false,
-    var isClickable: Boolean = false
+    var isClickable: Boolean = false,
+    var isHoliday: Boolean = false
 )

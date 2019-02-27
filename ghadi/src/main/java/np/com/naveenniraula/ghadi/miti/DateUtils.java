@@ -8,6 +8,7 @@ import java.util.Calendar;
 public class DateUtils {
     // Name of the month
     public final static String[] MONTH_NAMES = {"", "Baisakh", "Jestha", "Ashar", "Shrawan", "Bhadra", "Ashoj", "Kartik", "Mangshir", "Poush", "Magh", "Falgun", "Chaitra"};
+    public final static String[] MONTH_NAMES_AD = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     public final static String[] WEEK_DAY_NAMES = {"", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     // Starting Nepali year that this database starts storing date from.
     public final static int startNepaliYear = 2000;
@@ -114,6 +115,9 @@ public class DateUtils {
             new int[]{30, 32, 31, 32, 31, 30, 30, 30, 29, 30, 30, 30},
     };
 
+    // Starting Nepali year that this database storing date till.
+    public final static int endNepaliYear = startNepaliYear + data.length;
+
     /**
      * Get {@return number of days} in given {@param year} and {@param month}.
      */
@@ -138,6 +142,7 @@ public class DateUtils {
         int days = startEnglishDate.getDaysTill(engDate) + 1;
 
         for (int i = 0; i < getNumYears(); ++i) {
+
             for (int j = 0; j < 12; ++j) {
                 if (days > data[i][j])
                     days -= data[i][j];
@@ -159,6 +164,9 @@ public class DateUtils {
         int year = nepDate.year - startNepaliYear;
 
         for (int i = 0; i <= year; ++i) {
+
+            if (i >= data.length) break;
+
             for (int j = 0; j < 12; ++j) {
                 if (i == year && j == nepDate.month - 1) {
                     days += nepDate.day - 1;
@@ -181,16 +189,33 @@ public class DateUtils {
     }
 
     public static String getMonthName(int monthNumber) {
-        if (monthNumber < 1 || monthNumber > 12) {
-            return MONTH_NAMES[0];
-        }
-        return MONTH_NAMES[monthNumber];
+        return (monthNumber < 1 || monthNumber > 12)
+                ? MONTH_NAMES[0]
+                : MONTH_NAMES[monthNumber];
+    }
+
+    public static String getMonthNameAd(int monthNumber) {
+
+        return (monthNumber < 1 || monthNumber > 12)
+                ? MONTH_NAMES_AD[0]
+                : MONTH_NAMES_AD[monthNumber];
     }
 
     public static int getMonthNumber(String monthName) {
         int result = 0;
         for (int i = 0; i < MONTH_NAMES.length; i++) {
             if (MONTH_NAMES[i].equals(monthName)) {
+                result = i;
+                break;
+            }
+        }
+        return result;
+    }
+
+    public static int getMonthNumberAd(String monthName) {
+        int result = 0;
+        for (int i = 0; i < MONTH_NAMES_AD.length; i++) {
+            if (MONTH_NAMES_AD[i].equals(monthName)) {
                 result = i;
                 break;
             }
@@ -206,6 +231,14 @@ public class DateUtils {
         return getMonthName(month);
     }
 
+    public static String getNextAdMonthName(String monthName) {
+        int month = getMonthNumberAd(monthName) + 1;
+        if (month > 12) {
+            month = 1;
+        }
+        return getMonthNameAd(month);
+    }
+
     /**
      * Provides name of the next month in BS.
      *
@@ -218,6 +251,14 @@ public class DateUtils {
             month = 12;
         }
         return getMonthName(month);
+    }
+
+    public static String getPreviousAdMonthName(String monthName) {
+        int month = getMonthNumberAd(monthName) - 1;
+        if (month < 1) {
+            month = 12;
+        }
+        return getMonthNameAd(month);
     }
 
 }

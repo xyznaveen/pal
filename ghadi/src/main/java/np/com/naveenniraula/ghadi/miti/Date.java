@@ -93,6 +93,14 @@ public class Date {
         return new Date(year, month, day).getCalendar().get(Calendar.DAY_OF_WEEK);
     }
 
+    public String getReadableBsDate() {
+        return String.format("%s %02d, %04d", DateUtils.getMonthName(month), day, year);
+    }
+
+    public String getReadableAdDate() {
+        return String.format("%s %02d, %04d", DateUtils.getMonthNameAd(month), day, year);
+    }
+
     /**
      * Convert to simple string representation of this date.
      *
@@ -100,6 +108,7 @@ public class Date {
      */
     @Override
     public String toString() {
+
         return String.format("%04d-%02d-%02d", year, month, day);
     }
 }

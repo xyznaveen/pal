@@ -23,6 +23,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         override fun OnCellClicked(position: Int) {
             changeClickState(position)
             selectedDate = dataList[position] as DateItem
+            Log.i("BQ7CH72", "CELL CLICKED !! $selectedDate")
         }
     }
 
@@ -52,6 +53,16 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
     }
 
     fun getSelectedDate(): DateItem {
+
+        if (!::selectedDate.isInitialized) {
+            dataList.forEach {
+                val item = it as DateItem
+                if (item.isToday) {
+                    selectedDate = item
+                }
+            }
+        }
+
         return selectedDate
     }
 
@@ -93,6 +104,10 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
             )
         }
 
+        if (dt.isHoliday) {
+            holder.test.setTextColor(Color.RED)
+        }
+
         if (position >= 7 && dt.date.toInt() < 1) {
             holder.test.text = ""
             return
@@ -102,7 +117,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
     fun setDataList(data: ArrayList<T>) {
         dataList.clear()
-        notifyItemRangeRemoved(0, dataList.size)
+        notifyDataSetChanged()
 
         dataList.addAll(data)
         notifyItemRangeInserted(0, data.size)
@@ -113,7 +128,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
     }
 
     fun getData(position: Int): T {
-        return dataList.get(position)
+        return dataList[position]
     }
 
     class Vh(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
