@@ -23,7 +23,6 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         override fun OnCellClicked(position: Int) {
             changeClickState(position)
             selectedDate = dataList[position] as DateItem
-            Log.i("BQ7CH72", "CELL CLICKED !! $selectedDate")
         }
     }
 
@@ -116,6 +115,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
     }
 
     fun setDataList(data: ArrayList<T>) {
+
         dataList.clear()
         notifyDataSetChanged()
 

@@ -8,4 +8,9 @@ data class DateItem(
     var isSelected: Boolean = false,
     var isClickable: Boolean = false,
     var isHoliday: Boolean = false
-)
+) {
+    override fun toString(): String {
+
+        return "$year-$month-$date"
+    }
+}

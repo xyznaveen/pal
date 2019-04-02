@@ -7,6 +7,13 @@ import java.util.Calendar;
  */
 public class DateUtils {
     // Name of the month
+    public final static String HEADER_SUN = "S";
+    public final static String HEADER_MON = "M";
+    public final static String HEADER_TUE = "T";
+    public final static String HEADER_WED = "W";
+    public final static String HEADER_THU = "T";
+    public final static String HEADER_FRI = "F";
+    public final static String HEADER_SAT = "S";
     public final static String[] MONTH_NAMES = {"", "Baisakh", "Jestha", "Ashar", "Shrawan", "Bhadra", "Ashoj", "Kartik", "Mangshir", "Poush", "Magh", "Falgun", "Chaitra"};
     public final static String[] MONTH_NAMES_AD = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     public final static String[] WEEK_DAY_NAMES = {"", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
