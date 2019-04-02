@@ -1,6 +1,7 @@
 package np.com.naveenniraula.pal
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import np.com.naveenniraula.ghadi.data.GhadiResult
@@ -9,7 +10,7 @@ import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment
 
 class MainActivity : AppCompatActivity() {
 
-    private val gf = GhadiPickerFragment.newInstance()
+    private val gf = GhadiPickerFragment.newInstance(2075,12,17)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,8 +18,10 @@ class MainActivity : AppCompatActivity() {
 
         gf.setDatePickCompleteListener(object : DatePickCompleteListener {
             override fun onDateSelectionComplete(result: GhadiResult) {
-                englishDate.text = result.humanReadableAdDate
-                nepaliDate.text = result.humanReadableBsDate
+                englishDate.text = result.humanReadableAd
+                nepaliDate.text = result.humanReadableBs
+
+                Log.i("BQ7CH72", "$result")
             }
 
             override fun onDateSelectionCancelled(result: GhadiResult) {

@@ -21,7 +21,7 @@ class GhadiPickerViewModel : ViewModel() {
      * Gets the calendar dates for current month.
      * @param date the date instance which can be any custom date.
      */
-    fun prepareCalendarData(date: Date) {
+    fun prepareCalendarData(date: Date, markPassedDay: Boolean = false) {
 
         val list = ArrayList<DateItem>()
 
@@ -65,12 +65,17 @@ class GhadiPickerViewModel : ViewModel() {
                 model.year = nepaliDate.year.toString()
             }
 
+            // select passed date's day by default
+            if (
+                markPassedDay && date.convertToNepali().day == i
+            ) {
+                model.isSelected = true
+            }
+
             // check if the specified date is
             model.isToday = todayInBs.day == i
                     && model.year == todayInBs.year.toString()
                     && model.month == todayInBs.month.toString()
-
-            Log.i("BQ7CH72", "Date Today : ${model.isToday} $todayInBs $model")
 
             list.add(model)
 

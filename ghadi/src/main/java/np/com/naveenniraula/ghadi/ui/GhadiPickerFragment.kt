@@ -20,17 +20,33 @@ import np.com.naveenniraula.ghadi.listeners.DatePickCompleteListener
 import np.com.naveenniraula.ghadi.miti.Date
 import np.com.naveenniraula.ghadi.miti.DateUtils
 import np.com.naveenniraula.ghadi.utils.Ui
+import java.time.Month
+import java.time.Year
 import java.util.*
 
 class GhadiPickerFragment : DialogFragment() {
 
     companion object {
+
         fun newInstance() = GhadiPickerFragment()
+        fun newInstance(year: Int, month: Int, day: Int): GhadiPickerFragment {
+            val ghadiPickerFragment = GhadiPickerFragment()
+
+            ghadiPickerFragment.requestedDate = Date(year, month, day).convertToEnglish()
+
+            Log.i("BQ7CH72", "${ghadiPickerFragment.requestedDate} instance!")
+
+            return ghadiPickerFragment
+        }
+
         const val DAYS_IN_A_WEEK = 7
+        const val DAYS_START_NUM = 1
     }
 
-    private lateinit var viewModel: GhadiPickerViewModel
     private val adapter = NepaliDateAdapter<DateItem>()
+
+    private lateinit var requestedDate: Date
+    private lateinit var viewModel: GhadiPickerViewModel
     private lateinit var datePickCompleteListener: DatePickCompleteListener
 
     private lateinit var alertDialog: AlertDialog
@@ -73,7 +89,13 @@ class GhadiPickerFragment : DialogFragment() {
         viewModel.getCalendarData().observe(this, androidx.lifecycle.Observer {
             adapter.setDataList(it)
         })
-        viewModel.prepareCalendarData(Date(Calendar.getInstance()))
+        viewModel.prepareCalendarData(
+            if (::requestedDate.isInitialized) {
+                requestedDate
+            } else {
+                Date(Calendar.getInstance())
+            }, true
+        )
     }
 
     /**
@@ -87,7 +109,9 @@ class GhadiPickerFragment : DialogFragment() {
         // -----------------------
 
         val year = getRootView().findViewById<TextView>(R.id.gpfYear)
-        year.text = currentDateInNepali.year.toString()
+        year.text =
+            if (::requestedDate.isInitialized) requestedDate.convertToNepali().year.toString()
+            else currentDateInNepali.year.toString()
 
         val yPrev = getRootView().findViewById<ImageButton>(R.id.gpfPrevYear)
         val yNext = getRootView().findViewById<ImageButton>(R.id.gpfNextYear)
@@ -135,7 +159,9 @@ class GhadiPickerFragment : DialogFragment() {
         // -----------------------
 
         val month = getRootView().findViewById<TextView>(R.id.gpfMonth)
-        month.text = DateUtils.getMonthName(currentDateInNepali.month)
+        month.text =
+            if (::requestedDate.isInitialized) DateUtils.getMonthName(requestedDate.convertToNepali().month)
+            else DateUtils.getMonthName(currentDateInNepali.month)
 
         val next = getRootView().findViewById<ImageButton>(R.id.gpfNextMonth)
         next.setOnClickListener {

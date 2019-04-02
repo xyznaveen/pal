@@ -12,6 +12,8 @@ import np.com.naveenniraula.ghadi.R
 import np.com.naveenniraula.ghadi.data.DateItem
 import np.com.naveenniraula.ghadi.listeners.GhadiCellInteractionListener
 import np.com.naveenniraula.ghadi.miti.Date
+import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment.Companion.DAYS_IN_A_WEEK
+import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment.Companion.DAYS_START_NUM
 import java.util.*
 
 class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
@@ -107,8 +109,8 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
             holder.test.setTextColor(Color.RED)
         }
 
-        if (position >= 7 && dt.date.toInt() < 1) {
-            holder.test.text = ""
+        if (position >= DAYS_IN_A_WEEK && dt.date.toInt() < DAYS_START_NUM) {
+            holder.test.text = EMPTY_STRING
             return
         }
         holder.test.text = dt.date
@@ -159,6 +161,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
     companion object {
         private var lastCellPosition: Int = RecyclerView.NO_POSITION
+        private const val EMPTY_STRING = ""
     }
 
 }
