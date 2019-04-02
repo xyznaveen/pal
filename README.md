@@ -12,8 +12,11 @@
 
 ```
 // Kotlin
+
+// instantiate
 val ghadiFragment = GhadiPickerFragment.newInstance(2075,12,17)
 
+// add listener
 ghadiFragment.setDatePickCompleteListener(object : DatePickCompleteListener {
     override fun onDateSelectionComplete(result: GhadiResult) {
         // upon successful date selection this method is fired
@@ -23,4 +26,7 @@ ghadiFragment.setDatePickCompleteListener(object : DatePickCompleteListener {
         // if the user cancelled the date selection
     }
 })
+
+// show the fragment
+ghadiFragment.show(supportFragmentManager, gf.tag)
 ```
