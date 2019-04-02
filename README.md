@@ -28,5 +28,5 @@ ghadiFragment.setDatePickCompleteListener(object : DatePickCompleteListener {
 })
 
 // show the fragment
-ghadiFragment.show(supportFragmentManager, gf.tag)
+ghadiFragment.show(supportFragmentManager, ghadiFragment.tag)
 ```
