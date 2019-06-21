@@ -55,15 +55,9 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
     fun getSelectedDate(): DateItem {
 
-        if (!::selectedDate.isInitialized) {
-            dataList.forEach {
-                val item = it as DateItem
-                if (item.isToday) {
-                    selectedDate = item
-                }
-            }
-        }
-
+        // if the variable is not initialized no date was select
+        // so, return today's date
+        if (!::selectedDate.isInitialized) selectedDate = DateItem.getTodayNepali()
         return selectedDate
     }
 

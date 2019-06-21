@@ -193,6 +193,9 @@ class GhadiPickerFragment : DialogFragment() {
             if (!::datePickCompleteListener.isInitialized) throw listenerException
 
             val date = adapter.getSelectedDate()
+
+            Log.d("jqiu7", "$date")
+
             val engDate = Date(date.year.toInt(), date.month.toInt(), date.date.toInt()).convertToEnglish()
             val weekDayNumber = engDate.weekDayNum
 

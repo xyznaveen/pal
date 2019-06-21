@@ -10,6 +10,17 @@
 
 ### How do I use this ?
 
+##### Include In Project
+
+you must be using  jitpack to be able to use this project.
+
+see jitpack.io for more details on jitpack
+
+```
+implementation 'com.github.xyznaveen:pal:$latest-version'
+// see releases for $latest-version
+```
+
 ```
 // Kotlin
 
