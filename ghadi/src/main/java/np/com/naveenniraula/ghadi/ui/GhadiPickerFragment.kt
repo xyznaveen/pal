@@ -1,6 +1,7 @@
 package np.com.naveenniraula.ghadi.ui
 
 import android.app.Dialog
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ import np.com.naveenniraula.ghadi.data.GhadiResult
 import np.com.naveenniraula.ghadi.listeners.DatePickCompleteListener
 import np.com.naveenniraula.ghadi.miti.Date
 import np.com.naveenniraula.ghadi.miti.DateUtils
+import np.com.naveenniraula.ghadi.utils.ColorUtil
+import np.com.naveenniraula.ghadi.utils.ConversionUtil
 import np.com.naveenniraula.ghadi.utils.Ui
 import java.time.Month
 import java.time.Year
@@ -29,6 +32,16 @@ class GhadiPickerFragment : DialogFragment() {
     companion object {
 
         fun newInstance() = GhadiPickerFragment()
+        fun newInstance(date: Date): GhadiPickerFragment {
+            val ghadiPickerFragment = GhadiPickerFragment()
+
+            ghadiPickerFragment.requestedDate = date.convertToEnglish()
+
+            Log.i("BQ7CH72", "${ghadiPickerFragment.requestedDate} instance!")
+
+            return ghadiPickerFragment
+        }
+
         fun newInstance(year: Int, month: Int, day: Int): GhadiPickerFragment {
             val ghadiPickerFragment = GhadiPickerFragment()
 
@@ -42,6 +55,8 @@ class GhadiPickerFragment : DialogFragment() {
         const val DAYS_IN_A_WEEK = 7
         const val DAYS_START_NUM = 1
     }
+
+    var bgFgColor: Pair<Int, Int> = Pair(Color.BLACK, Color.WHITE)
 
     private val adapter = NepaliDateAdapter<DateItem>()
 
@@ -58,7 +73,7 @@ class GhadiPickerFragment : DialogFragment() {
         IllegalAccessException("DatePickCompleteListener has not been implemented. Please implement this to return result when action is completed.")
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setStyle(DialogFragment.STYLE_NO_TITLE, R.style.Theme_AppCompat_Dialog_Alert)
+        setStyle(STYLE_NO_TITLE, R.style.Theme_AppCompat_Dialog_Alert)
         super.onCreate(savedInstanceState)
     }
 
@@ -109,9 +124,11 @@ class GhadiPickerFragment : DialogFragment() {
         // -----------------------
 
         val year = getRootView().findViewById<TextView>(R.id.gpfYear)
+        year.setBackgroundColor(bgFgColor.first)
+        year.setTextColor(bgFgColor.second)
         year.text =
-            if (::requestedDate.isInitialized) requestedDate.convertToNepali().year.toString()
-            else currentDateInNepali.year.toString()
+            if (::requestedDate.isInitialized) ConversionUtil.toNepali(requestedDate.convertToNepali().year.toString())
+            else ConversionUtil.toNepali(currentDateInNepali.year.toString())
 
         val yPrev = getRootView().findViewById<ImageButton>(R.id.gpfPrevYear)
         val yNext = getRootView().findViewById<ImageButton>(R.id.gpfNextYear)
@@ -131,7 +148,7 @@ class GhadiPickerFragment : DialogFragment() {
             }
 
             val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
-            year.text = yearNumber.toString()
+            year.text = ConversionUtil.toNepali(yearNumber.toString())
             changeDate(Date(yearNumber, upcomingMonthNumber, 1))
         }
         yNext.setOnClickListener {
@@ -149,7 +166,7 @@ class GhadiPickerFragment : DialogFragment() {
             }
 
             val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
-            year.text = yearNumber.toString()
+            year.text = ConversionUtil.toNepali(yearNumber.toString())
 
             changeDate(Date(yearNumber, upcomingMonthNumber, 1))
         }
@@ -159,6 +176,8 @@ class GhadiPickerFragment : DialogFragment() {
         // -----------------------
 
         val month = getRootView().findViewById<TextView>(R.id.gpfMonth)
+        month.setBackgroundColor(ColorUtil.lighten(bgFgColor.first, .5))
+        month.setTextColor(bgFgColor.second)
         month.text =
             if (::requestedDate.isInitialized) DateUtils.getMonthName(requestedDate.convertToNepali().month)
             else DateUtils.getMonthName(currentDateInNepali.month)
@@ -188,6 +207,8 @@ class GhadiPickerFragment : DialogFragment() {
         // -----------------------
 
         val confirm = getRootView().findViewById<Button>(R.id.gpfConfirm)
+        confirm.setBackgroundColor(bgFgColor.first)
+        confirm.setTextColor(bgFgColor.second)
         confirm.setOnClickListener {
 
             if (!::datePickCompleteListener.isInitialized) throw listenerException
@@ -196,7 +217,8 @@ class GhadiPickerFragment : DialogFragment() {
 
             Log.d("jqiu7", "$date")
 
-            val engDate = Date(date.year.toInt(), date.month.toInt(), date.date.toInt()).convertToEnglish()
+            val engDate =
+                Date(date.year.toInt(), date.month.toInt(), date.date.toInt()).convertToEnglish()
             val weekDayNumber = engDate.weekDayNum
 
             val humanReadableBs = engDate.convertToNepali().readableBsDate
@@ -219,6 +241,8 @@ class GhadiPickerFragment : DialogFragment() {
             dismiss()
         }
         val cancel = getRootView().findViewById<Button>(R.id.gpfCancel)
+        cancel.setBackgroundColor(bgFgColor.first)
+        cancel.setTextColor(bgFgColor.second)
         cancel.setOnClickListener {
 
             if (!::datePickCompleteListener.isInitialized) throw listenerException
