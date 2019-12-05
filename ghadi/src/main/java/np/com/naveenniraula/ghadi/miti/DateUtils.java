@@ -1,6 +1,7 @@
 package np.com.naveenniraula.ghadi.miti;
 
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Nepali date conversion utilities and database.
@@ -15,6 +16,20 @@ public class DateUtils {
     public final static String HEADER_FRI = "F";
     public final static String HEADER_SAT = "S";
     public final static String[] MONTH_NAMES = {"", "Baisakh", "Jestha", "Ashar", "Shrawan", "Bhadra", "Ashoj", "Kartik", "Mangshir", "Poush", "Magh", "Falgun", "Chaitra"};
+    public final static String[] MONTH_NAMES_NEP = {"", "बैशाख", "जेष्ठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन", "कार्तिक", "मंसिर", "पौष", "माघ", "फाल्गुन", "चैत्र"};
+    public final static String[] NUMBER_NEP = {"०", "१", "२", "३", "४", "५", "६", "७", "८", "९"};
+    public final static HashMap<String, Integer> NUMBER_ENG = new HashMap<String, Integer>() {{
+        put("०", 0);
+        put("१", 0);
+        put("२", 0);
+        put("३", 0);
+        put("४", 0);
+        put("५", 0);
+        put("६", 0);
+        put("७", 0);
+        put("८", 0);
+        put("९", 0);
+    }};
     public final static String[] MONTH_NAMES_AD = {"", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
     public final static String[] WEEK_DAY_NAMES = {"", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
     // Starting Nepali year that this database starts storing date from.
@@ -197,8 +212,8 @@ public class DateUtils {
 
     public static String getMonthName(int monthNumber) {
         return (monthNumber < 1 || monthNumber > 12)
-                ? MONTH_NAMES[0]
-                : MONTH_NAMES[monthNumber];
+                ? MONTH_NAMES_NEP[0]
+                : MONTH_NAMES_NEP[monthNumber];
     }
 
     public static String getMonthNameAd(int monthNumber) {
@@ -210,8 +225,8 @@ public class DateUtils {
 
     public static int getMonthNumber(String monthName) {
         int result = 0;
-        for (int i = 0; i < MONTH_NAMES.length; i++) {
-            if (MONTH_NAMES[i].equals(monthName)) {
+        for (int i = 0; i < MONTH_NAMES_NEP.length; i++) {
+            if (MONTH_NAMES_NEP[i].equals(monthName)) {
                 result = i;
                 break;
             }
