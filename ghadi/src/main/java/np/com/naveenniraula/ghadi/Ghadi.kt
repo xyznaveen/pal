@@ -1,57 +1,68 @@
 package np.com.naveenniraula.ghadi
 
+import android.graphics.Color
+import androidx.fragment.app.FragmentManager
+import np.com.naveenniraula.ghadi.listeners.DatePickCompleteListener
+import np.com.naveenniraula.ghadi.miti.Date
+import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment
 import java.util.*
 
-class Ghadi {
+abstract class Ghadi {
 
+    class Builder(private val fragmentManager: FragmentManager) {
 
+        private lateinit var date: Date
+        private lateinit var datePickCompleteListener: DatePickCompleteListener
+        private var bg: Int = Color.BLACK
+        private var fg: Int = Color.WHITE
+        private var bgFgColor: Pair<Int, Int> = Pair(bg, fg)
 
-    internal class GhadiBuilder {
-
-        private val ghadi by lazy { Ghadi() }
-
-        fun withDate(date: Calendar): GhadiBuilder {
-            TODO("Implement date setting mechanism.")
+        fun fromNepali(year: Int, month: Int, day: Int): Builder {
+            date = Date(year, month, day)
             return this
         }
 
-        fun withTitle(title: String): GhadiBuilder {
-            TODO("Set title")
+        fun fromEnglish(year: Int, month: Int, day: Int): Builder {
+            date = Date(year, month, day).convertToNepali()
             return this
         }
 
-        fun withTitle(titleResId: Int): GhadiBuilder {
-            TODO("Set title.")
+        fun fromEnglish(timestamp: Long): Builder {
+
+            val cal = Calendar.getInstance().apply {
+                timeInMillis = timestamp
+            }
+
+            return fromEnglish(
+                cal.get(Calendar.YEAR),
+                cal.get(Calendar.MONTH).inc(),
+                cal.get(Calendar.DAY_OF_MONTH)
+            )
+        }
+
+        fun setBackgroundColor(color: Int): Builder {
+            bg = color
+            bgFgColor = Pair(bg, fg)
             return this
         }
 
-        fun withOkButton(titleResId: Int): GhadiBuilder {
-            TODO("Set positive action.")
+        fun setForegroundColor(color: Int): Builder {
+            fg = color
+            bgFgColor = Pair(bg, fg)
             return this
         }
 
-        fun withOkButton(okText: String): GhadiBuilder {
-            TODO("Set positive action.")
+        fun withCallback(datePickCompleteListener: DatePickCompleteListener): Builder {
+            this.datePickCompleteListener = datePickCompleteListener
             return this
         }
 
-        fun withCancelButton(titleResId: Int): GhadiBuilder {
-            TODO("Set negative action.")
-            return this
-        }
-
-        fun withCancelButton(okText: String): GhadiBuilder {
-            TODO("Set negative action.")
-            return this
-        }
-
-        fun withSelectionCompleteListener(): GhadiBuilder {
-            TODO("Set interaction complete listener.")
-            return this
-        }
-
-        fun create(): Ghadi {
-            return ghadi
+        fun build(): GhadiPickerFragment {
+            val ghadiPickerFragment: GhadiPickerFragment =
+                GhadiPickerFragment.newInstance()
+            ghadiPickerFragment.bgFgColor = bgFgColor
+            ghadiPickerFragment.setDatePickCompleteListener(datePickCompleteListener)
+            return ghadiPickerFragment
         }
 
     }
