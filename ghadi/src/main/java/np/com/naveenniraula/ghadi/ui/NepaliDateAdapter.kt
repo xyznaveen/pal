@@ -14,6 +14,7 @@ import np.com.naveenniraula.ghadi.listeners.GhadiCellInteractionListener
 import np.com.naveenniraula.ghadi.miti.Date
 import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment.Companion.DAYS_IN_A_WEEK
 import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment.Companion.DAYS_START_NUM
+import java.lang.Exception
 import java.util.*
 
 class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
@@ -21,30 +22,40 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
     private var dataList: ArrayList<T> = arrayListOf()
     private lateinit var selectedDate: DateItem
 
-    private val ghadiCellInteractionListener: GhadiCellInteractionListener = object : GhadiCellInteractionListener {
-        override fun OnCellClicked(position: Int) {
-            changeClickState(position)
-            selectedDate = dataList[position] as DateItem
+    private val ghadiCellInteractionListener: GhadiCellInteractionListener =
+        object : GhadiCellInteractionListener {
+            override fun OnCellClicked(position: Int) {
+                changeClickState(position)
+                selectedDate = dataList[position] as DateItem
+            }
         }
-    }
 
     private fun changeClickState(position: Int) {
+        try {
 
-        // last cell
-        if (NepaliDateAdapter.lastCellPosition != RecyclerView.NO_POSITION) {
-            val lastCell = dataList[NepaliDateAdapter.lastCellPosition] as DateItem
-            lastCell.isSelected = false
-            dataList[NepaliDateAdapter.lastCellPosition] = lastCell as T
-            notifyItemChanged(NepaliDateAdapter.lastCellPosition)
+            // last cell
+            if (lastCellPosition != RecyclerView.NO_POSITION) {
+                val lastCell = dataList[lastCellPosition] as DateItem
+                lastCell.isSelected = false
+                dataList[lastCellPosition] = lastCell as T
+                notifyItemChanged(lastCellPosition)
+            }
+
+            // current cell
+            val currentCell = dataList[position] as DateItem
+            currentCell.isSelected = true
+            dataList[position] = currentCell as T
+            notifyItemChanged(position)
+
+            lastCellPosition = position
+
+        } catch (exception: Exception) {
+
+            exception.printStackTrace()
+
+            Log.d("NepaliDateAdapter", "We got this exception : ${exception.localizedMessage}")
+
         }
-
-        // current cell
-        val currentCell = dataList[position] as DateItem
-        currentCell.isSelected = true
-        dataList[position] = currentCell as T
-        notifyItemChanged(position)
-
-        NepaliDateAdapter.lastCellPosition = position
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Vh {
@@ -68,7 +79,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         val currentCell = dataList[todayPos] as DateItem
         currentCell.isSelected = !currentCell.isSelected
         dataList[todayPos] = currentCell as T
-        NepaliDateAdapter.lastCellPosition = todayPos
+        lastCellPosition = todayPos
     }
 
     override fun getItemCount(): Int {
