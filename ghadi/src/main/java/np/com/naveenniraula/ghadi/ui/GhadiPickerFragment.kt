@@ -23,8 +23,6 @@ import np.com.naveenniraula.ghadi.miti.DateUtils
 import np.com.naveenniraula.ghadi.utils.ColorUtil
 import np.com.naveenniraula.ghadi.utils.ConversionUtil
 import np.com.naveenniraula.ghadi.utils.Ui
-import java.time.Month
-import java.time.Year
 import java.util.*
 
 class GhadiPickerFragment : DialogFragment() {
@@ -236,6 +234,8 @@ class GhadiPickerFragment : DialogFragment() {
                 humanReadableBs,
                 humanReadableAd
             )
+
+            Log.d("BQ7CH72", result.toString())
 
             datePickCompleteListener.onDateSelectionComplete(result)
             dismiss()
