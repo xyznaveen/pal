@@ -11,7 +11,6 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,7 +40,6 @@ class GhadiPickerFragment : DialogFragment() {
             return ghadiPickerFragment
         }
 
-        @Deprecated("Pass an instance of date instead of year, month and day.")
         fun newInstance(year: Int, month: Int, day: Int): GhadiPickerFragment {
             val ghadiPickerFragment = GhadiPickerFragment()
 
@@ -59,7 +57,6 @@ class GhadiPickerFragment : DialogFragment() {
     var bgFgColor: Pair<Int, Int> = Pair(Color.BLACK, Color.WHITE)
 
     private val adapter = NepaliDateAdapter<DateItem>()
-    private lateinit var fManager: FragmentManager
 
     private lateinit var requestedDate: Date
     private lateinit var viewModel: GhadiPickerViewModel
@@ -238,7 +235,7 @@ class GhadiPickerFragment : DialogFragment() {
                 humanReadableAd
             )
 
-            Log.d("BQ7CH72", "${result.getTimestamp()}")
+            Log.d("BQ7CH72", result.toString())
 
             datePickCompleteListener.onDateSelectionComplete(result)
             dismiss()
@@ -278,18 +275,6 @@ class GhadiPickerFragment : DialogFragment() {
 
     fun setDatePickCompleteListener(datePickCompleteListener: DatePickCompleteListener) {
         this.datePickCompleteListener = datePickCompleteListener
-    }
-
-    fun setFragmentManager(fragmentManager: FragmentManager) {
-        this.fManager = fragmentManager
-    }
-
-    fun show() {
-        if (::fManager.isInitialized) {
-            show(fManager, this.tag)
-        } else {
-            Log.d("BQ7CH72", "fragment manager has not been initialized.")
-        }
     }
 
     /**

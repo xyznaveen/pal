@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity() {
                 override fun onDateSelectionCancelled(result: GhadiResult) {
 
                 }
-            }).build().show()
+            }).build().show(supportFragmentManager, "tag")
     }
 
     private fun replaceFragment(fragment: GhadiPickerFragment) {

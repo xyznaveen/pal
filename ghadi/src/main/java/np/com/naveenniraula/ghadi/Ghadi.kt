@@ -62,6 +62,7 @@ abstract class Ghadi {
                 GhadiPickerFragment.newInstance()
             ghadiPickerFragment.bgFgColor = bgFgColor
             ghadiPickerFragment.setDatePickCompleteListener(datePickCompleteListener)
+            ghadiPickerFragment.setFragmentManager(fragmentManager)
             return ghadiPickerFragment
         }
 
