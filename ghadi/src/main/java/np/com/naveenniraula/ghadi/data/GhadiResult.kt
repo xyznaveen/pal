@@ -1,7 +1,7 @@
 package np.com.naveenniraula.ghadi.data
 
-import android.util.Log
 import np.com.naveenniraula.ghadi.miti.Date
+import np.com.naveenniraula.ghadi.miti.DateUtils
 import java.util.*
 
 const val INVALID_DATE = -21
@@ -9,6 +9,7 @@ const val INVALID_STRING = "GhadiResult.INVALID"
 
 data class GhadiResult(
     var bsDay: Int = INVALID_DATE,
+    var bsDayEnd: Int = INVALID_DATE,
     var bsMonth: Int = INVALID_DATE,
     var bsYear: Int = INVALID_DATE,
 
@@ -42,6 +43,15 @@ data class GhadiResult(
         adYear = date.year
         humanReadableAd = date.readableAdDate
         humanReadableBs = date.readableBsDate
+
+        calculateMaxDays()
+    }
+
+    /**
+     * Calculate the maximum number of days for this B.S month.
+     */
+    private fun calculateMaxDays() {
+        bsDayEnd = DateUtils.getNumDays(bsYear, bsMonth)
     }
 
     fun getNepaliDate(): Date {
