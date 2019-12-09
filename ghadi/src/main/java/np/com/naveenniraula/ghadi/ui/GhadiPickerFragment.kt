@@ -1,5 +1,6 @@
 package np.com.naveenniraula.ghadi.ui
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -30,23 +32,17 @@ class GhadiPickerFragment : DialogFragment() {
     companion object {
 
         fun newInstance() = GhadiPickerFragment()
+
         fun newInstance(date: Date): GhadiPickerFragment {
             val ghadiPickerFragment = GhadiPickerFragment()
-
             ghadiPickerFragment.requestedDate = date.convertToEnglish()
-
-            Log.i("BQ7CH72", "${ghadiPickerFragment.requestedDate} instance!")
-
             return ghadiPickerFragment
         }
 
+        @Deprecated("Don't use this method. Pass in the Date instance instead.")
         fun newInstance(year: Int, month: Int, day: Int): GhadiPickerFragment {
             val ghadiPickerFragment = GhadiPickerFragment()
-
             ghadiPickerFragment.requestedDate = Date(year, month, day).convertToEnglish()
-
-            Log.i("BQ7CH72", "${ghadiPickerFragment.requestedDate} instance!")
-
             return ghadiPickerFragment
         }
 
@@ -57,6 +53,8 @@ class GhadiPickerFragment : DialogFragment() {
     var bgFgColor: Pair<Int, Int> = Pair(Color.BLACK, Color.WHITE)
 
     private val adapter = NepaliDateAdapter<DateItem>()
+
+    private lateinit var mFragmentManager: FragmentManager
 
     private lateinit var requestedDate: Date
     private lateinit var viewModel: GhadiPickerViewModel
@@ -75,6 +73,7 @@ class GhadiPickerFragment : DialogFragment() {
         super.onCreate(savedInstanceState)
     }
 
+    @SuppressLint("InflateParams")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         context?.let {
             val inflater = LayoutInflater.from(it)
@@ -300,6 +299,14 @@ class GhadiPickerFragment : DialogFragment() {
     private fun getDisplayedYear(): Int {
         val year = getRootView().findViewById<TextView>(R.id.gpfYear)
         return year.text.toString().toInt()
+    }
+
+    fun setFragmentManager(mFragmentManager: FragmentManager) {
+        this.mFragmentManager = mFragmentManager
+    }
+
+    fun show() {
+        show(fragmentManager, this.tag)
     }
 
 }
