@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity() {
                     englishDate.text = result.humanReadableAd
                     nepaliDate.text = result.humanReadableBs
 
-                    Log.i("BQ7CH72", "$result")
+                    // point to day one
+                    result.pointToDayOne()
+                    Log.d("asdasdjhasd", "$result")
                 }
 
                 override fun onDateSelectionCancelled(result: GhadiResult) {

@@ -101,6 +101,10 @@ public class Date {
         return String.format("%s %02d, %04d", DateUtils.getMonthNameAd(month), day, year);
     }
 
+    public void pointToDayOneAd() {
+        day = 1;
+    }
+
     /**
      * Convert to simple string representation of this date.
      *
@@ -108,7 +112,6 @@ public class Date {
      */
     @Override
     public String toString() {
-
         return String.format("%04d-%02d-%02d", year, month, day);
     }
 }

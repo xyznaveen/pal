@@ -1,6 +1,7 @@
 package np.com.naveenniraula.ghadi
 
 import android.graphics.Color
+import android.util.Log
 import androidx.fragment.app.FragmentManager
 import np.com.naveenniraula.ghadi.listeners.DatePickCompleteListener
 import np.com.naveenniraula.ghadi.miti.Date

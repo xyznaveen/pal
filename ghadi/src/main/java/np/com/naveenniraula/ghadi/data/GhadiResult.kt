@@ -1,5 +1,6 @@
 package np.com.naveenniraula.ghadi.data
 
+import android.util.Log
 import np.com.naveenniraula.ghadi.miti.Date
 import java.util.*
 
@@ -32,6 +33,15 @@ data class GhadiResult(
         }
 
         return calendar.timeInMillis
+    }
+
+    fun pointToDayOne() {
+        val date = Date(bsYear, bsMonth, 1).convertToEnglish()
+        adDay = date.day
+        adMonth = date.month
+        adYear = date.year
+        humanReadableAd = date.readableAdDate
+        humanReadableBs = date.readableBsDate
     }
 
     fun getNepaliDate(): Date {

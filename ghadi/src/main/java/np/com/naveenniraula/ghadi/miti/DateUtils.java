@@ -283,4 +283,10 @@ public class DateUtils {
         return getMonthNameAd(month);
     }
 
+    public static Date resetToFirstDayOfBs(Date date) {
+        // this is the first day in ad or bs
+        date.day = 1;
+        return date.convertToEnglish().convertToNepali();
+    }
+
 }
