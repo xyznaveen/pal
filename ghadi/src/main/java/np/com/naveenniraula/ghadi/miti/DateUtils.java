@@ -16,6 +16,7 @@ public class DateUtils {
     public final static String HEADER_FRI = "F";
     public final static String HEADER_SAT = "S";
     public final static String[] MONTH_NAMES = {"", "Baisakh", "Jestha", "Ashar", "Shrawan", "Bhadra", "Ashoj", "Kartik", "Mangshir", "Poush", "Magh", "Falgun", "Chaitra"};
+    public final static String[] MONTH_NAMES_MAPPED = {"", "Apr / May", "May / Jun", "Jun / Jul", "Jul / Aug", "Aug / Sep", "Sep / Oct", "Oct / Nov", "Nov / Dec", "Dec / Jan", "Jan / Feb", "Feb / Mar", "Mar / Apr"};
     public final static String[] MONTH_NAMES_NEP = {"", "बैशाख", "जेष्ठ", "आषाढ", "श्रावण", "भाद्र", "आश्विन", "कार्तिक", "मंसिर", "पौष", "माघ", "फाल्गुन", "चैत्र"};
     public final static String[] NUMBER_NEP = {"०", "१", "२", "३", "४", "५", "६", "७", "८", "९"};
     public final static HashMap<String, Integer> NUMBER_ENG = new HashMap<String, Integer>() {{
