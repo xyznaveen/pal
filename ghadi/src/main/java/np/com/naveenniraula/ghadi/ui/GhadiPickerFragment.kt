@@ -173,11 +173,22 @@ class GhadiPickerFragment : DialogFragment() {
         // -----------------------
 
         val month = getRootView().findViewById<TextView>(R.id.gpfMonth)
+        val monthExt = getRootView().findViewById<TextView>(R.id.gpfMonthExt)
         month.setBackgroundColor(ColorUtil.lighten(bgFgColor.first, .5))
+        monthExt.setBackgroundColor(ColorUtil.lighten(bgFgColor.first, .5))
         month.setTextColor(bgFgColor.second)
+        monthExt.setTextColor(bgFgColor.second)
         month.text =
-            if (::requestedDate.isInitialized) DateUtils.getMonthName(requestedDate.convertToNepali().month)
-            else DateUtils.getMonthName(currentDateInNepali.month)
+            if (::requestedDate.isInitialized) {
+                DateUtils.getMonthName(requestedDate.convertToNepali().month)
+            } else {
+                DateUtils.getMonthName(currentDateInNepali.month)
+            }
+        monthExt.text = if (::requestedDate.isInitialized) {
+            DateUtils.MONTH_NAMES_MAPPED[requestedDate.convertToNepali().month]
+        } else {
+            DateUtils.MONTH_NAMES_MAPPED[currentDateInNepali.month]
+        }
 
         val next = getRootView().findViewById<ImageButton>(R.id.gpfNextMonth)
         next.setOnClickListener {
@@ -187,6 +198,8 @@ class GhadiPickerFragment : DialogFragment() {
             val upcomingMonthNumber = DateUtils.getMonthNumber(upcomingMonthName)
             month.text = upcomingMonthName
             changeDate(Date(nYear, upcomingMonthNumber, 1))
+
+            monthExt.text = DateUtils.MONTH_NAMES_MAPPED[upcomingMonthNumber]
         }
 
         val prev = getRootView().findViewById<ImageButton>(R.id.gpfPrevMonth)
@@ -197,6 +210,8 @@ class GhadiPickerFragment : DialogFragment() {
             val upcomingMonthNumber = DateUtils.getMonthNumber(upcomingMonthName)
             month.text = upcomingMonthName
             changeDate(Date(nYear, upcomingMonthNumber, 1))
+
+            monthExt.text = DateUtils.MONTH_NAMES_MAPPED[upcomingMonthNumber]
         }
 
         // -----------------------

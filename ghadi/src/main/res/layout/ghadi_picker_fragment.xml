@@ -12,7 +12,7 @@
             android:layout_height="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/gpfMonth"
+            app:layout_constraintTop_toBottomOf="@+id/gpfMonthExt"
             tools:itemCount="8"
             tools:listitem="@layout/item_date_cell" />
 
@@ -51,7 +51,7 @@
             android:padding="16dp"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            android:textSize="30sp"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -65,7 +65,7 @@
             android:layout_height="0dp"
             android:elevation="4dp"
             android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/gpfMonth"
+            app:layout_constraintBottom_toTopOf="@+id/nepaliDateList"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/gpfMonth"
             app:srcCompat="@drawable/ic_next" />
@@ -77,11 +77,25 @@
             android:layout_height="0dp"
             android:elevation="4dp"
             android:padding="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/gpfMonth"
+            app:layout_constraintBottom_toTopOf="@+id/nepaliDateList"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/gpfMonth"
             app:srcCompat="@drawable/ic_back" />
     <!--END: Month Buttons-->
+
+    <TextView
+            android:id="@+id/gpfMonthExt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#7f8c8d"
+            android:gravity="center"
+            android:padding="4dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/gpfMonth" />
 
     <TextView
             android:id="@+id/gpfMonth"
@@ -89,7 +103,7 @@
             android:layout_height="wrap_content"
             android:background="#7f8c8d"
             android:gravity="center"
-            android:padding="12dp"
+            android:padding="6dp"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -135,6 +149,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/view"
             app:layout_constraintTop_toTopOf="@+id/gpfCancel" />
+
     <!--END: Action Buttons -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
