@@ -7,13 +7,15 @@ data class DateItem(
     val date: String,
     var month: String = "",
     var year: String = "",
+    var adDate: String = "",
+    var adMonth: String = "",
+    var adYear: String = "",
     var isToday: Boolean = false,
     var isSelected: Boolean = false,
     var isClickable: Boolean = false,
     var isHoliday: Boolean = false
 ) {
     override fun toString(): String {
-
         return "$year-$month-$date"
     }
 
