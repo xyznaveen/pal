@@ -21,6 +21,9 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
     private var dataList: ArrayList<T> = arrayListOf()
     private lateinit var selectedDate: DateItem
+    private val color by lazy {
+        Color.parseColor("#7f8c8d")
+    }
 
     private val ghadiCellInteractionListener: GhadiCellInteractionListener =
         object : GhadiCellInteractionListener {
@@ -102,7 +105,16 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
             holder.root.setBackgroundColor(
                 if (dt.isSelected) {
                     holder.test.setTextColor(Color.WHITE)
-                    Color.parseColor("#7f8c8d")
+                    color
+                } else {
+                    holder.test.setTextColor(Color.BLACK)
+                    Color.WHITE
+                }
+            )
+            holder.engDate.setBackgroundColor(
+                if (dt.isSelected) {
+                    holder.test.setTextColor(Color.WHITE)
+                    color
                 } else {
                     holder.test.setTextColor(Color.BLACK)
                     Color.WHITE
@@ -119,6 +131,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
             return
         }
         holder.test.text = dt.date
+        holder.engDate.text = dt.adDate
     }
 
     fun setDataList(data: ArrayList<T>) {
@@ -143,6 +156,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         private lateinit var ghadiCellInteractionListener: GhadiCellInteractionListener
         val root: ConstraintLayout = itemView.findViewById(R.id.idcRoot)
         val test: TextView = itemView.findViewById(R.id.tesss)
+        val engDate: TextView = itemView.findViewById(R.id.english_date)
 
         init {
             root.setOnClickListener(this)
