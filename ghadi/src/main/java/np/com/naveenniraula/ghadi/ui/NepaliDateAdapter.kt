@@ -12,6 +12,7 @@ import np.com.naveenniraula.ghadi.R
 import np.com.naveenniraula.ghadi.data.DateItem
 import np.com.naveenniraula.ghadi.listeners.GhadiCellInteractionListener
 import np.com.naveenniraula.ghadi.miti.Date
+import np.com.naveenniraula.ghadi.miti.DateUtils
 import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment.Companion.DAYS_IN_A_WEEK
 import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment.Companion.DAYS_START_NUM
 import java.lang.Exception
@@ -29,7 +30,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         object : GhadiCellInteractionListener {
             override fun OnCellClicked(position: Int) {
                 changeClickState(position)
-                selectedDate = dataList[position] as DateItem
+                selectedDate = (dataList[position] as DateItem)
             }
         }
 
@@ -72,7 +73,9 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         // if the variable is not initialized no date was select
         // so, return today's date
         if (!::selectedDate.isInitialized) selectedDate = DateItem.getTodayNepali()
-        return selectedDate
+        return selectedDate.apply {
+            dateEnd = DateUtils.getNumDays(year.toInt(), month.toInt()).toString()
+        }
     }
 
     private fun selectTodaysDate() {

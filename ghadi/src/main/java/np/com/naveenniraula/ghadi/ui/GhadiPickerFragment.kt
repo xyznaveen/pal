@@ -238,7 +238,7 @@ class GhadiPickerFragment : DialogFragment() {
 
             val result = GhadiResult(
                 date.date.toInt(),
-                0,
+                date.dateEnd.toInt(),
                 date.month.toInt(),
                 date.year.toInt(),
                 engDate.day,

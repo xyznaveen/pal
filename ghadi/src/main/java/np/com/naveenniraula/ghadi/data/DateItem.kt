@@ -5,6 +5,7 @@ import java.util.*
 
 data class DateItem(
     val date: String,
+    var dateEnd: String = "",
     var month: String = "",
     var year: String = "",
     var adDate: String = "",
