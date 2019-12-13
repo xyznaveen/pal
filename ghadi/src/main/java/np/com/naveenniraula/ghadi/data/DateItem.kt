@@ -17,7 +17,23 @@ data class DateItem(
     var isHoliday: Boolean = false
 ) {
     override fun toString(): String {
-        return "$year-$month-$date"
+        val currentData =
+            String.format(
+                "{ date: %s, dateEnd: %s, month: %s, year: %s, adDate: %s, adMonth: %s, adYear: %s, isToday: %s, isSelected: %s, isClickable: %s, isHoliday: %s }",
+                date,
+                dateEnd,
+                month,
+                year,
+                adDate,
+                adMonth,
+                adYear,
+                isToday,
+                isSelected,
+                isClickable,
+                isHoliday
+                )
+         return currentData
+        // return "$year-$month-$date"
     }
 
     companion object {

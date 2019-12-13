@@ -229,8 +229,7 @@ class GhadiPickerFragment : DialogFragment() {
 
             Log.d("jqiu7", "$date")
 
-            val engDate =
-                Date(date.year.toInt(), date.month.toInt(), date.date.toInt()).convertToEnglish()
+            val engDate = Date(date.adYear.toInt(), date.adMonth.toInt(), date.adDate.toInt())
             val weekDayNumber = engDate.weekDayNum
 
             val humanReadableBs = engDate.convertToNepali().readableBsDate
@@ -241,18 +240,17 @@ class GhadiPickerFragment : DialogFragment() {
                 date.dateEnd.toInt(),
                 date.month.toInt(),
                 date.year.toInt(),
-                engDate.day,
-                engDate.month,
-                engDate.year,
+                date.adDate.toInt(),
+                date.adMonth.toInt(),
+                date.adYear.toInt(),
                 weekDayNumber,
                 DateUtils.getDayName(weekDayNumber),
                 humanReadableBs,
                 humanReadableAd
             )
 
-            Log.d("BQ7CH72", result.toString())
-
             datePickCompleteListener.onDateSelectionComplete(result)
+            Log.d("BQ7CH72", result.toString())
             dismiss()
         }
         val cancel = getRootView().findViewById<Button>(R.id.gpfCancel)

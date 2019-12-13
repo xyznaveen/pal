@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                     nepaliDate.text = result.humanReadableBs
 
                     // point to day one
-                    result.pointToDayOne()
+                    // result.pointToDayOne()
                     Log.d("asdasdjhasd", "$result")
                 }
 
