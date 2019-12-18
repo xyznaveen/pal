@@ -73,8 +73,12 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         // if the variable is not initialized no date was select
         // so, return today's date
         if (!::selectedDate.isInitialized) selectedDate = DateItem.getTodayNepali()
+        val currentDate = Date(Calendar.getInstance())
         return selectedDate.apply {
             dateEnd = DateUtils.getNumDays(year.toInt(), month.toInt()).toString()
+            adDate = currentDate.day.toString()
+            adMonth = currentDate.month.toString()
+            adYear = currentDate.year.toString()
         }
     }
 
