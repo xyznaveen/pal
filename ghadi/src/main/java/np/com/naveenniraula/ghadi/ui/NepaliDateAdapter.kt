@@ -76,7 +76,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
             selectedDate = DateItem.getTodayNepali().apply {
                 val tempDate = Calendar.getInstance()
                 adYear = tempDate.get(Calendar.YEAR).toString()
-                adMonth = tempDate.get(Calendar.MONTH).toString()
+                adMonth = tempDate.get(Calendar.MONTH).inc().toString()
                 adDate = tempDate.get(Calendar.DAY_OF_MONTH).toString()
             }
         }

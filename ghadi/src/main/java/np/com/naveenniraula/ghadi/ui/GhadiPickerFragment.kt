@@ -257,7 +257,6 @@ class GhadiPickerFragment : DialogFragment() {
         cancel.setBackgroundColor(bgFgColor.first)
         cancel.setTextColor(bgFgColor.second)
         cancel.setOnClickListener {
-
             if (!::datePickCompleteListener.isInitialized) throw listenerException
             dismiss()
         }
