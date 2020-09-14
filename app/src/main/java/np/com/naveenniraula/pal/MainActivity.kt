@@ -1,5 +1,6 @@
 package np.com.naveenniraula.pal
 
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         // gf.show(supportFragmentManager, gf.tag)
         Ghadi.Builder(supportFragmentManager)
             .fromEnglish(System.currentTimeMillis())
-            .setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+            .setBackgroundColor(Color.parseColor("#0098DA"))
             .setForegroundColor(ContextCompat.getColor(this, android.R.color.white))
             .withCallback(object : DatePickCompleteListener {
                 override fun onDateSelectionComplete(result: GhadiResult) {

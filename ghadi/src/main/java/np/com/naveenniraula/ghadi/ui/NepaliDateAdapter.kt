@@ -1,12 +1,14 @@
 package np.com.naveenniraula.ghadi.ui
 
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import np.com.naveenniraula.ghadi.R
 import np.com.naveenniraula.ghadi.data.DateItem
@@ -20,52 +22,49 @@ import java.util.*
 
 class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
+    private lateinit var mBgDrawable: Drawable
+    private lateinit var mBgDrawableToday: Drawable
+
     private var dataList: ArrayList<T> = arrayListOf()
     private lateinit var selectedDate: DateItem
-    private val color by lazy {
-        Color.parseColor("#7f8c8d")
-    }
-
-    private val ghadiCellInteractionListener: GhadiCellInteractionListener =
-        object : GhadiCellInteractionListener {
-            override fun OnCellClicked(position: Int) {
-                changeClickState(position)
-                selectedDate = (dataList[position] as DateItem)
-            }
-        }
-
-    private fun changeClickState(position: Int) {
-        try {
-
-            // last cell
-            if (lastCellPosition != RecyclerView.NO_POSITION) {
-                val lastCell = dataList[lastCellPosition] as DateItem
-                lastCell.isSelected = false
-                dataList[lastCellPosition] = lastCell as T
-                notifyItemChanged(lastCellPosition)
-            }
-
-            // current cell
-            val currentCell = dataList[position] as DateItem
-            currentCell.isSelected = true
-            dataList[position] = currentCell as T
-            notifyItemChanged(position)
-
-            lastCellPosition = position
-
-        } catch (exception: Exception) {
-
-            exception.printStackTrace()
-
-            Log.d("NepaliDateAdapter", "We got this exception : ${exception.localizedMessage}")
-
-        }
-    }
+    private val color = Color.parseColor("#7f8c8d")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): Vh {
 
+        if (!::mBgDrawable.isInitialized) {
+            mBgDrawableToday =
+                ContextCompat.getDrawable(parent.context, R.drawable.bg_circle_padding)!!
+            mBgDrawableToday.setBounds(8, 8, 8, 8)
+
+            mBgDrawable = ContextCompat.getDrawable(parent.context, R.drawable.bg_circle_padding)!!
+            mBgDrawable.setBounds(8, 8, 8, 8)
+        }
+
         val inflater = LayoutInflater.from(parent.context)
-        return Vh(inflater.inflate(R.layout.item_date_cell, parent, false))
+        val vh = Vh(inflater.inflate(R.layout.item_date_cell, parent, false))
+        vh.root.setOnClickListener {
+            val di = (dataList[vh.adapterPosition] as DateItem)
+            if (di.isClickable && lastCellPosition != vh.adapterPosition) {
+
+                // check if there were any last cells
+                if (lastCellPosition != RecyclerView.NO_POSITION) {
+                    val lastCell = dataList[lastCellPosition] as DateItem
+                    lastCell.isSelected = false
+                    dataList[lastCellPosition]
+                }
+
+                val currentCell = dataList[vh.adapterPosition] as DateItem
+                currentCell.isSelected = true
+                dataList[vh.adapterPosition] = currentCell as T
+
+                notifyItemChanged(lastCellPosition)
+                notifyItemChanged(vh.adapterPosition)
+
+                // this is the last position
+                lastCellPosition = vh.adapterPosition
+            }
+        }
+        return vh
     }
 
     fun getSelectedDate(): DateItem {
@@ -100,48 +99,13 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
     }
 
     override fun onBindViewHolder(holder: Vh, position: Int) {
-
         val dt = (dataList[position] as DateItem)
-
-        holder.root.isClickable = dt.isClickable
-        holder.setGhadiCellInteractionListener(if (dt.isClickable) ghadiCellInteractionListener else null)
-
-        if (dt.isToday) {
-            // won't change today's color
-            holder.root.setBackgroundColor(Color.BLACK)
-            holder.test.setTextColor(Color.WHITE)
-        } else {
-            // if not today change color accordingly
-            holder.root.setBackgroundColor(
-                if (dt.isSelected) {
-                    holder.test.setTextColor(Color.WHITE)
-                    color
-                } else {
-                    holder.test.setTextColor(Color.BLACK)
-                    Color.WHITE
-                }
-            )
-            holder.engDate.setBackgroundColor(
-                if (dt.isSelected) {
-                    holder.test.setTextColor(Color.WHITE)
-                    color
-                } else {
-                    holder.test.setTextColor(Color.BLACK)
-                    Color.WHITE
-                }
-            )
-        }
-
-        if (dt.isHoliday) {
-            holder.test.setTextColor(Color.RED)
-        }
+        holder.adjust(dt)
 
         if (position >= DAYS_IN_A_WEEK && dt.date.toInt() < DAYS_START_NUM) {
             holder.test.text = EMPTY_STRING
             return
         }
-        holder.test.text = dt.date
-        holder.engDate.text = dt.adDate
     }
 
     fun setDataList(data: ArrayList<T>) {
@@ -161,31 +125,51 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         return dataList[position]
     }
 
-    class Vh(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+    class Vh(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private lateinit var ghadiCellInteractionListener: GhadiCellInteractionListener
         val root: ConstraintLayout = itemView.findViewById(R.id.idcRoot)
         val test: TextView = itemView.findViewById(R.id.tesss)
         val engDate: TextView = itemView.findViewById(R.id.english_date)
 
-        init {
-            root.setOnClickListener(this)
+        fun adjust(di: DateItem) {
+
+            // make clickable or un-clickable
+            root.isClickable = di.isClickable
+
+            if (di.isToday) setTodayColor()
+            else setNormalColor(di)
+
+            if (di.isHoliday) setHolidayColor()
+
+            test.text = di.date
+            engDate.text = di.adDate
         }
 
-        fun setGhadiCellInteractionListener(ghadiCellInteractionListener: GhadiCellInteractionListener?) {
-            ghadiCellInteractionListener?.let {
-                this.ghadiCellInteractionListener = ghadiCellInteractionListener
+        private fun setNormalColor(di: DateItem) {
+
+            if (!di.isClickable) {
+                engDate.setTextColor(Color.WHITE)
+                test.setTextColor(Color.WHITE)
+            }
+
+            if (di.isSelected) {
+                root.setBackgroundResource(R.drawable.bg_circle_padding)
+                test.setTextColor(Color.WHITE)
+            } else {
+                test.setTextColor(Color.BLACK)
+                root.setBackgroundColor(Color.WHITE)
             }
         }
 
-        override fun onClick(v: View?) {
-            if (
-                ::ghadiCellInteractionListener.isInitialized
-                && adapterPosition != RecyclerView.NO_POSITION
-            ) {
-                ghadiCellInteractionListener.OnCellClicked(adapterPosition)
-            }
+        private fun setTodayColor() {
+            test.setTextColor(Color.WHITE)
+            root.setBackgroundResource(R.drawable.bg_circle_padding)
         }
+
+        private fun setHolidayColor() {
+            test.setTextColor(Color.RED)
+        }
+
     }
 
     companion object {

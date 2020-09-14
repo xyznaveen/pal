@@ -174,8 +174,8 @@ class GhadiPickerFragment : DialogFragment() {
 
         val month = getRootView().findViewById<TextView>(R.id.gpfMonth)
         val monthExt = getRootView().findViewById<TextView>(R.id.gpfMonthExt)
-        month.setBackgroundColor(ColorUtil.lighten(bgFgColor.first, .5))
-        monthExt.setBackgroundColor(ColorUtil.lighten(bgFgColor.first, .5))
+        month.setBackgroundColor(bgFgColor.first)
+        monthExt.setBackgroundColor(bgFgColor.first)
         month.setTextColor(bgFgColor.second)
         monthExt.setTextColor(bgFgColor.second)
         month.text =
@@ -319,7 +319,7 @@ class GhadiPickerFragment : DialogFragment() {
     }
 
     fun show() {
-        show(fragmentManager, this.tag)
+        show(childFragmentManager, this.tag)
     }
 
 }
