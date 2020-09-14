@@ -1,5 +1,7 @@
 package np.com.naveenniraula.ghadi.data
 
+import android.text.TextUtils
+import android.util.Log
 import np.com.naveenniraula.ghadi.miti.Date
 import java.util.*
 
@@ -16,6 +18,7 @@ data class DateItem(
     var isClickable: Boolean = false,
     var isHoliday: Boolean = false
 ) {
+
     override fun toString(): String {
         val currentData =
             String.format(
@@ -31,8 +34,8 @@ data class DateItem(
                 isSelected,
                 isClickable,
                 isHoliday
-                )
-         return currentData
+            )
+        return currentData
         // return "$year-$month-$date"
     }
 

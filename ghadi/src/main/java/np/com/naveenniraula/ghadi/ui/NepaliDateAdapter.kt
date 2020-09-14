@@ -1,5 +1,6 @@
 package np.com.naveenniraula.ghadi.ui
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.Log
@@ -62,6 +63,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
                 // this is the last position
                 lastCellPosition = vh.adapterPosition
+                selectedDate = currentCell
             }
         }
         return vh
@@ -143,14 +145,14 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
             test.text = di.date
             engDate.text = di.adDate
-        }
-
-        private fun setNormalColor(di: DateItem) {
 
             if (!di.isClickable) {
                 engDate.setTextColor(Color.WHITE)
-                test.setTextColor(Color.WHITE)
             }
+
+        }
+
+        private fun setNormalColor(di: DateItem) {
 
             if (di.isSelected) {
                 root.setBackgroundResource(R.drawable.bg_circle_padding)
