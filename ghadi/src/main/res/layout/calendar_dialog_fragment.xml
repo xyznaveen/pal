@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+                name="ui"
+                type="np.com.naveenniraula.ghadi.data.UiProperty" />
+
+    </data>
+
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/gpfRoot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/materialButtonToggleGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
+                    app:checkedButton="@id/btn2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn1"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AD" />
+
+                <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn2"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="BS" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/nepaliDateList"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gpfMonth"
+                    tools:itemCount="8"
+                    tools:listitem="@layout/item_date_cell" />
+
+            <!--START: Year Button-->
+            <ImageButton
+                    android:id="@+id/gpfPrevYear"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    android:elevation="4dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/gpfMonth"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gpfYear"
+                    app:srcCompat="@drawable/ic_back" />
+
+            <ImageButton
+                    android:id="@+id/gpfNextYear"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    android:elevation="4dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/gpfPrevMonth"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gpfPrevYear"
+                    app:srcCompat="@drawable/ic_next" />
+            <!--END: Year Button-->
+
+            <TextView
+                    android:id="@+id/gpfYear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:padding="8dp"
+                    android:textAlignment="center"
+                    android:textSize="24sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/materialButtonToggleGroup" />
+
+
+            <!--START: Month Buttons-->
+            <ImageButton
+                    android:id="@+id/gpfNextMonth"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    android:elevation="4dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/gpfPrevMonth"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gpfYear"
+                    app:srcCompat="@drawable/ic_next" />
+
+            <ImageButton
+                    android:id="@+id/gpfPrevMonth"
+                    style="@style/Base.Widget.AppCompat.Button.Borderless"
+                    android:layout_width="48dp"
+                    android:layout_height="0dp"
+                    android:elevation="4dp"
+                    android:padding="8dp"
+                    app:layout_constraintBottom_toTopOf="@+id/nepaliDateList"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gpfYear"
+                    app:srcCompat="@drawable/ic_back" />
+            <!--END: Month Buttons-->
+
+            <TextView
+                    android:id="@+id/gpfMonth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:padding="6dp"
+                    android:textAllCaps="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gpfYear" />
+
+            <!--START: Action Buttons -->
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/gpfCancel"
+                    style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Cancel"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/gpfConfirm"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nepaliDateList" />
+
+            <View
+                    android:id="@+id/view"
+                    android:layout_width="1dp"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/gpfCancel" />
+
+            <com.google.android.material.button.MaterialButton
+                    android:id="@+id/gpfConfirm"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Confirm"
+                    app:backgroundTint="@color/collMat"
+                    app:layout_constraintBottom_toBottomOf="@+id/gpfCancel"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/gpfCancel"
+                    app:layout_constraintTop_toTopOf="@+id/gpfCancel" />
+
+            <!--END: Action Buttons -->
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
