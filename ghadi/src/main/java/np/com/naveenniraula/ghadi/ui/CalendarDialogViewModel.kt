@@ -7,11 +7,14 @@ import androidx.lifecycle.ViewModel
 import np.com.naveenniraula.ghadi.data.DateItem
 import np.com.naveenniraula.ghadi.miti.Date
 import np.com.naveenniraula.ghadi.miti.DateUtils
-import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment.Companion.DAYS_IN_A_WEEK
+import np.com.naveenniraula.ghadi.ui.CalendarDialogFragment.Companion.DAYS_IN_A_WEEK
 import java.util.*
+import java.util.concurrent.Executors
+import kotlin.collections.ArrayList
 
-class GhadiPickerViewModel : ViewModel() {
+class CalendarDialogViewModel : ViewModel() {
 
+    private val mService = Executors.newSingleThreadExecutor()
     private val calendarData: MutableLiveData<ArrayList<DateItem>> = MutableLiveData()
 
     fun getCalendarData(): MutableLiveData<ArrayList<DateItem>> {
@@ -24,7 +27,8 @@ class GhadiPickerViewModel : ViewModel() {
      */
     fun prepareCalendarData(date: Date, markPassedDay: Boolean = false) {
 
-        AsyncTask.execute {
+        mService.submit {
+
             val list = ArrayList<DateItem>()
 
             // ------------------------------------
@@ -99,6 +103,57 @@ class GhadiPickerViewModel : ViewModel() {
             }
         }
 
+    }
+
+    /**
+     * Prepare the date for english and get it.
+     *
+     * @param date
+     * @param markPassedDay
+     *
+     */
+    fun getAdDate(
+        date: Date,
+        markPassedDay: Boolean = false
+    ) {
+        AsyncTask.execute {
+            val list = ArrayList<DateItem>()
+
+            // ------------------------------------
+            // add headers for days representation
+            // ------------------------------------
+            list.add(DateItem(DateUtils.HEADER_SUN))
+            list.add(DateItem(DateUtils.HEADER_MON))
+            list.add(DateItem(DateUtils.HEADER_TUE))
+            list.add(DateItem(DateUtils.HEADER_WED))
+            list.add(DateItem(DateUtils.HEADER_THU))
+            list.add(DateItem(DateUtils.HEADER_FRI))
+            list.add(DateItem(DateUtils.HEADER_SAT))
+
+            val cal = date.calendar
+
+            val firstDay = 1
+            val lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH) + 1
+            var dayStartsAt = cal.firstDayOfWeek
+
+            val year = cal.get(Calendar.YEAR)
+            val month = cal.get(Calendar.MONTH) + 1
+
+            // pad number of days
+            while (dayStartsAt >= 1) {
+                val model = DateItem(date = "-1", dateEnd = "-1", month = "-1", isClickable = false)
+                list.add(model)
+                dayStartsAt--
+            }
+
+            for (day in firstDay until lastDay) {
+                val model = DateItem("$day", "$month", "$year")
+                list.add(model)
+            }
+
+            calendarData.postValue(list)
+
+        }
     }
 
 }

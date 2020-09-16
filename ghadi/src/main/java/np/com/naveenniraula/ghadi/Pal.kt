@@ -1,14 +1,13 @@
 package np.com.naveenniraula.ghadi
 
 import android.graphics.Color
-import android.util.Log
 import androidx.fragment.app.FragmentManager
 import np.com.naveenniraula.ghadi.listeners.DatePickCompleteListener
 import np.com.naveenniraula.ghadi.miti.Date
-import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment
+import np.com.naveenniraula.ghadi.ui.CalendarDialogFragment
 import java.util.*
 
-abstract class Ghadi {
+abstract class Pal {
 
     class Builder(private val fragmentManager: FragmentManager) {
 
@@ -58,13 +57,13 @@ abstract class Ghadi {
             return this
         }
 
-        fun build(): GhadiPickerFragment {
-            val ghadiPickerFragment: GhadiPickerFragment =
-                GhadiPickerFragment.newInstance()
-            ghadiPickerFragment.bgFgColor = bgFgColor
-            ghadiPickerFragment.setDatePickCompleteListener(datePickCompleteListener)
-            ghadiPickerFragment.setFragmentManager(fragmentManager)
-            return ghadiPickerFragment
+        fun build(): CalendarDialogFragment {
+            val calendarDialogFragment: CalendarDialogFragment =
+                CalendarDialogFragment.newInstance()
+            calendarDialogFragment.bgFgColor = bgFgColor
+            calendarDialogFragment.setDatePickCompleteListener(datePickCompleteListener)
+            calendarDialogFragment.setFragmentManager(fragmentManager)
+            return calendarDialogFragment
         }
 
     }

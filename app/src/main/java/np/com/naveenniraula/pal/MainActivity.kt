@@ -6,10 +6,10 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
-import np.com.naveenniraula.ghadi.Ghadi
+import np.com.naveenniraula.ghadi.Pal
 import np.com.naveenniraula.ghadi.data.GhadiResult
 import np.com.naveenniraula.ghadi.listeners.DatePickCompleteListener
-import np.com.naveenniraula.ghadi.ui.GhadiPickerFragment
+import np.com.naveenniraula.ghadi.ui.CalendarDialogFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showPicker() {
         // gf.show(supportFragmentManager, gf.tag)
-        Ghadi.Builder(supportFragmentManager)
+        Pal.Builder(supportFragmentManager)
             .fromEnglish(System.currentTimeMillis())
             .setBackgroundColor(Color.parseColor("#0098DA"))
             .setForegroundColor(ContextCompat.getColor(this, android.R.color.white))
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             }).build().show(supportFragmentManager, "tag")
     }
 
-    private fun replaceFragment(fragment: GhadiPickerFragment) {
+    private fun replaceFragment(fragment: CalendarDialogFragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.amShowCalendar, fragment, fragment.tag).commit()
     }

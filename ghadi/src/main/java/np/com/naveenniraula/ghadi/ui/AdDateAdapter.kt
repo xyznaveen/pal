@@ -17,12 +17,12 @@ import np.com.naveenniraula.ghadi.ui.CalendarDialogFragment.Companion.DAYS_IN_A_
 import np.com.naveenniraula.ghadi.ui.CalendarDialogFragment.Companion.DAYS_START_NUM
 import java.util.*
 
-class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
+class AdDateAdapter : RecyclerView.Adapter<AdDateAdapter.Vh>() {
 
     private lateinit var mBgDrawable: Drawable
     private lateinit var mBgDrawableToday: Drawable
 
-    private var dataList: ArrayList<T> = arrayListOf()
+    private var dataList: ArrayList<DateItem> = arrayListOf()
     private lateinit var selectedDate: DateItem
     private val color = Color.parseColor("#7f8c8d")
 
@@ -45,14 +45,14 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
                 // check if there were any last cells
                 if (lastCellPosition != RecyclerView.NO_POSITION) {
-                    val lastCell = dataList[lastCellPosition] as DateItem
+                    val lastCell = dataList[lastCellPosition]
                     lastCell.isSelected = false
                     dataList[lastCellPosition]
                 }
 
-                val currentCell = dataList[vh.adapterPosition] as DateItem
+                val currentCell = dataList[vh.adapterPosition]
                 currentCell.isSelected = true
-                dataList[vh.adapterPosition] = currentCell as T
+                dataList[vh.adapterPosition] = currentCell
 
                 notifyItemChanged(lastCellPosition)
                 notifyItemChanged(vh.adapterPosition)
@@ -86,9 +86,9 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         val today: Int = Date(Calendar.getInstance()).convertToNepali().day
         val todayPos = today + 8
 
-        val currentCell = dataList[todayPos] as DateItem
+        val currentCell = dataList[todayPos]
         currentCell.isSelected = !currentCell.isSelected
-        dataList[todayPos] = currentCell as T
+        dataList[todayPos] = currentCell
         lastCellPosition = todayPos
     }
 
@@ -106,7 +106,7 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         }
     }
 
-    fun setDataList(data: ArrayList<T>) {
+    fun setDataList(data: ArrayList<DateItem>) {
 
         dataList.clear()
         notifyDataSetChanged()
@@ -115,11 +115,11 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
         notifyItemRangeInserted(0, data.size)
     }
 
-    fun addData(data: T) {
+    fun addData(data: DateItem) {
         dataList.add(data)
     }
 
-    fun getData(position: Int): T {
+    fun getData(position: Int): DateItem {
         return dataList[position]
     }
 

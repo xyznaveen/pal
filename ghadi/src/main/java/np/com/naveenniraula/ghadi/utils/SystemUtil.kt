@@ -2,7 +2,7 @@ package np.com.naveenniraula.ghadi.utils
 
 import android.os.Build
 
-class System {
+class SystemUtil {
 
     companion object {
 

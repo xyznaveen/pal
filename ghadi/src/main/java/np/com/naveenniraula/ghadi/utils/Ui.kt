@@ -11,7 +11,7 @@ class Ui {
          * Changes the color of the image button's image.
          */
         fun tintButtonImage(btn: ImageButton, colorId: Int) {
-            if (System.isAtLeastLolliop()) {
+            if (SystemUtil.isAtLeastLolliop()) {
                 btn.imageTintList = ColorStateList.valueOf(btn.context.resources.getColor(colorId))
             }
         }
