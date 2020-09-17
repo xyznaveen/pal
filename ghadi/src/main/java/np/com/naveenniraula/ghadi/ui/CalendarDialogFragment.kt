@@ -9,12 +9,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.Observable
+import androidx.databinding.library.baseAdapters.BR
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import np.com.naveenniraula.ghadi.R
@@ -27,7 +28,6 @@ import np.com.naveenniraula.ghadi.miti.DateUtils
 import np.com.naveenniraula.ghadi.utils.ConversionUtil
 import np.com.naveenniraula.ghadi.utils.Ui
 import java.util.*
-import kotlin.math.min
 
 class CalendarDialogFragment : DialogFragment() {
 
@@ -61,7 +61,9 @@ class CalendarDialogFragment : DialogFragment() {
     private lateinit var mFragmentManager: FragmentManager
 
     private lateinit var requestedDate: Date
-    private lateinit var viewModel: CalendarDialogViewModel
+    private val viewModel: CalendarDialogViewModel by lazy {
+        ViewModelProvider(this).get(CalendarDialogViewModel::class.java)
+    }
     private lateinit var datePickCompleteListener: DatePickCompleteListener
 
     /**
@@ -82,6 +84,7 @@ class CalendarDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setStyle(STYLE_NO_TITLE, R.style.Theme_AppCompat_Dialog_Alert)
         super.onCreate(savedInstanceState)
+
     }
 
     @SuppressLint("InflateParams")
@@ -95,9 +98,12 @@ class CalendarDialogFragment : DialogFragment() {
             setupListeners()
 
             mBinding.materialButtonToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-                if (isChecked)
-                    Toast.makeText(requireContext(), "we have id : $checkedId", Toast.LENGTH_SHORT)
-                        .show()
+                if (isChecked) {
+                    when (checkedId) {
+                        R.id.btn1 -> viewModel.ui.isBs = false
+                        R.id.btn2 -> viewModel.ui.isBs = true
+                    }
+                }
             }
 
             val builder = AlertDialog.Builder(it)
@@ -114,10 +120,29 @@ class CalendarDialogFragment : DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(CalendarDialogViewModel::class.java)
+        mBinding.ui = viewModel.ui
+        viewModel.ui.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                val ui = viewModel.ui
+                when (propertyId) {
+                    BR.bs -> {
+                        if (ui.isBs) {
+                            changeDate(currentDateInNepali)
+                        } else {
+                            changeDate(viewModel.currentEnglishDate.convertToNepali())
+                        }
+
+                        // to avoid crash when the data is less than the last index
+                        adapter.adBsToggled()
+                    }
+                }
+            }
+        })
+
         viewModel.getCalendarData().observe(this, androidx.lifecycle.Observer {
-            adjustRecyclerViewHeight(it)
+            viewModel.ui.isCalculating = false
             adapter.setDataList(it)
+            adjustRecyclerViewHeight(it.size)
         })
 
         val _date = if (::requestedDate.isInitialized) {
@@ -126,8 +151,8 @@ class CalendarDialogFragment : DialogFragment() {
             Date(Calendar.getInstance())
         }
 
-        viewModel.prepareCalendarData(_date, true)
-        // viewModel.getAdDate(_date, true)
+        if (viewModel.ui.isBs) viewModel.prepareCalendarData(_date, true)
+        else viewModel.getAdDate(_date, true)
     }
 
     /**
@@ -167,6 +192,10 @@ class CalendarDialogFragment : DialogFragment() {
         val lp = mBinding.nepaliDateList.layoutParams
         lp.height = lastHeight
         mBinding.nepaliDateList.layoutParams = lp
+
+        val plp = mBinding.progressBarParent.layoutParams
+        plp.height = lp.height
+        mBinding.progressBarParent.layoutParams = plp
     }
 
     /**
@@ -179,12 +208,11 @@ class CalendarDialogFragment : DialogFragment() {
         // year button listeners
         // -----------------------
 
-        val year = getRootView().findViewById<TextView>(R.id.gpfYear)
-        // year.setBackgroundColor(bgFgColor.first)
-        year.setTextColor(bgFgColor.first)
-        year.text =
+        mBinding.gpfYear.setTextColor(bgFgColor.first)
+        viewModel.ui.bsYear =
             if (::requestedDate.isInitialized) ConversionUtil.toNepali(requestedDate.convertToNepali().year.toString())
-            else ConversionUtil.toNepali(currentDateInNepali.year.toString())
+                ?: ""
+            else ConversionUtil.toNepali(currentDateInNepali.year.toString()) ?: ""
 
         val yPrev = getRootView().findViewById<ImageButton>(R.id.gpfPrevYear)
         val yNext = getRootView().findViewById<ImageButton>(R.id.gpfNextYear)
@@ -204,7 +232,7 @@ class CalendarDialogFragment : DialogFragment() {
             }
 
             val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
-            year.text = ConversionUtil.toNepali(yearNumber.toString())
+            mBinding.ui!!.bsYear = ConversionUtil.toNepali(yearNumber.toString()) ?: ""
             changeDate(Date(yearNumber, upcomingMonthNumber, 1))
         }
         yNext.setOnClickListener {
@@ -222,7 +250,7 @@ class CalendarDialogFragment : DialogFragment() {
             }
 
             val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
-            year.text = ConversionUtil.toNepali(yearNumber.toString())
+            mBinding.ui!!.bsYear = ConversionUtil.toNepali(yearNumber.toString()) ?: ""
 
             changeDate(Date(yearNumber, upcomingMonthNumber, 1))
         }
@@ -237,38 +265,44 @@ class CalendarDialogFragment : DialogFragment() {
         } else {
             DateUtils.MONTH_NAMES_MAPPED[currentDateInNepali.month]
         }
-        mBinding.gpfMonth.text = if (::requestedDate.isInitialized) {
+        viewModel.ui.bsMonth = if (::requestedDate.isInitialized) {
             DateUtils.getMonthName(requestedDate.convertToNepali().month)
         } else {
             DateUtils.getMonthName(currentDateInNepali.month)
         }
 
-        mBinding.gpfMonth.text = "${mBinding.gpfMonth.text} ( $extMonth )"
+        viewModel.ui.bsMonth = "${viewModel.ui.bsMonth} ( $extMonth )"
 
-        val next = getRootView().findViewById<ImageButton>(R.id.gpfNextMonth)
-        next.setOnClickListener {
-
-            val nYear = getDisplayedYear()
-            val upcomingMonthName = DateUtils.getNextMonthName(getDisplayedMonth())
-            val upcomingMonthNumber = DateUtils.getMonthNumber(upcomingMonthName)
-            mBinding.gpfMonth.text = upcomingMonthName
-            changeDate(Date(nYear, upcomingMonthNumber, 1))
-
-            extMonth = DateUtils.MONTH_NAMES_MAPPED[upcomingMonthNumber]
-            mBinding.gpfMonth.text = "${mBinding.gpfMonth.text} ( $extMonth )"
+        mBinding.gpfNextMonth.setOnClickListener {
+            if (viewModel.ui.isBs) {
+                val nYear = getDisplayedYear()
+                val upcomingMonthName = DateUtils.getNextMonthName(getDisplayedMonth())
+                val upcomingMonthNumber = DateUtils.getMonthNumber(upcomingMonthName)
+                viewModel.ui.bsMonth = upcomingMonthName
+                changeDate(Date(nYear, upcomingMonthNumber, 1))
+                extMonth = DateUtils.MONTH_NAMES_MAPPED[upcomingMonthNumber]
+                viewModel.ui.bsMonth = "${viewModel.ui.bsMonth} ( $extMonth )"
+            } else {
+                viewModel.currentEnglishDate.month = viewModel.currentEnglishDate.month + 1
+                changeDate(null)
+            }
         }
 
         val prev = getRootView().findViewById<ImageButton>(R.id.gpfPrevMonth)
         prev.setOnClickListener {
+            if (viewModel.ui.isBs) {
+                val nYear = getDisplayedYear()
+                val upcomingMonthName = DateUtils.getPreviousMonthName(getDisplayedMonth())
+                val upcomingMonthNumber = DateUtils.getMonthNumber(upcomingMonthName)
+                viewModel.ui.bsMonth = upcomingMonthName
+                changeDate(Date(nYear, upcomingMonthNumber, 1))
 
-            val nYear = getDisplayedYear()
-            val upcomingMonthName = DateUtils.getPreviousMonthName(getDisplayedMonth())
-            val upcomingMonthNumber = DateUtils.getMonthNumber(upcomingMonthName)
-            mBinding.gpfMonth.text = upcomingMonthName
-            changeDate(Date(nYear, upcomingMonthNumber, 1))
-
-            extMonth = DateUtils.MONTH_NAMES_MAPPED[upcomingMonthNumber]
-            mBinding.gpfMonth.text = "${mBinding.gpfMonth.text} ( $extMonth )"
+                extMonth = DateUtils.MONTH_NAMES_MAPPED[upcomingMonthNumber]
+                viewModel.ui.bsMonth = "${viewModel.ui.bsMonth} ( $extMonth )"
+            } else {
+                viewModel.currentEnglishDate.month = viewModel.currentEnglishDate.month - 1
+                changeDate(null)
+            }
         }
 
         // -----------------------
@@ -283,6 +317,15 @@ class CalendarDialogFragment : DialogFragment() {
             if (!::datePickCompleteListener.isInitialized) throw listenerException
 
             val date = adapter.getSelectedDate()
+
+            if (date.adYear == date.year) {
+                // we have the same year meaning we will need to convert everything
+
+                // let us start by incrementing the ad month by 1 we don't have index 0 start
+                date.adMonth = "${date.adMonth.toInt().inc()}"
+
+
+            }
 
             Log.d("jqiu7", "$date")
 
@@ -323,10 +366,16 @@ class CalendarDialogFragment : DialogFragment() {
      * Changes date based on the button click of respective entity; Month or Year.
      */
     private fun changeDate(date: Date?) {
-        date?.convertToEnglish()?.let {
-            viewModel.prepareCalendarData(it)
-            // viewModel.getAdDate(it)
-        } ?: showDateUnavailable()
+        viewModel.ui.isCalculating = true
+        Log.i("RVHEIGHT", "the date is null : ${date == null}")
+
+        if (viewModel.ui.isBs) {
+            date?.convertToEnglish()?.let {
+                viewModel.prepareCalendarData(it)
+            } ?: showDateUnavailable()
+        } else {
+            viewModel.getAdDate()
+        }
     }
 
     private fun showDateUnavailable() {
@@ -359,7 +408,7 @@ class CalendarDialogFragment : DialogFragment() {
      * @return name of the month currently visible.
      */
     private fun getDisplayedMonth(): String {
-        return mBinding.gpfMonth.text.toString().split(" ")[0]
+        return viewModel.ui.bsMonth.split(" ")[0]
     }
 
     /**
@@ -367,8 +416,7 @@ class CalendarDialogFragment : DialogFragment() {
      * @return year number as [Int].
      */
     private fun getDisplayedYear(): Int {
-        val year = getRootView().findViewById<TextView>(R.id.gpfYear)
-        return year.text.toString().toInt()
+        return viewModel.ui.bsYear.toInt()
     }
 
     fun setFragmentManager(mFragmentManager: FragmentManager) {

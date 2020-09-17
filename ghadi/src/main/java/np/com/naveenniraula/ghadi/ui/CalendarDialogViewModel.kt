@@ -1,10 +1,10 @@
 package np.com.naveenniraula.ghadi.ui
 
-import android.os.AsyncTask
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import np.com.naveenniraula.ghadi.data.DateItem
+import np.com.naveenniraula.ghadi.data.UiProperty
 import np.com.naveenniraula.ghadi.miti.Date
 import np.com.naveenniraula.ghadi.miti.DateUtils
 import np.com.naveenniraula.ghadi.ui.CalendarDialogFragment.Companion.DAYS_IN_A_WEEK
@@ -13,6 +13,12 @@ import java.util.concurrent.Executors
 import kotlin.collections.ArrayList
 
 class CalendarDialogViewModel : ViewModel() {
+
+    val ui = UiProperty()
+
+    private val mThisMonth = Calendar.getInstance()
+    var currentEnglishDate: Date = Date(Calendar.getInstance()).convertToEnglish()
+        private set
 
     private val mService = Executors.newSingleThreadExecutor()
     private val calendarData: MutableLiveData<ArrayList<DateItem>> = MutableLiveData()
@@ -97,6 +103,11 @@ class CalendarDialogViewModel : ViewModel() {
                         && model.year == todayInBs.year.toString()
                         && model.month == todayInBs.month.toString()
 
+                if (model.isToday) {
+                    currentEnglishDate =
+                        Date(model.year.toInt(), model.month.toInt(), i).convertToEnglish()
+                }
+
                 list.add(model)
 
                 calendarData.postValue(list)
@@ -104,6 +115,21 @@ class CalendarDialogViewModel : ViewModel() {
         }
 
     }
+
+    private val months = arrayOf(
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+    )
 
     /**
      * Prepare the date for english and get it.
@@ -113,10 +139,10 @@ class CalendarDialogViewModel : ViewModel() {
      *
      */
     fun getAdDate(
-        date: Date,
+        date: Date? = null,
         markPassedDay: Boolean = false
     ) {
-        AsyncTask.execute {
+        mService.submit {
             val list = ArrayList<DateItem>()
 
             // ------------------------------------
@@ -130,30 +156,68 @@ class CalendarDialogViewModel : ViewModel() {
             list.add(DateItem(DateUtils.HEADER_FRI))
             list.add(DateItem(DateUtils.HEADER_SAT))
 
-            val cal = date.calendar
+            // first get total number of days this month
+            val calendar = currentEnglishDate.calendar
 
-            val firstDay = 1
-            val lastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH) + 1
-            var dayStartsAt = cal.firstDayOfWeek
+            val _year = calendar.get(Calendar.YEAR)
 
-            val year = cal.get(Calendar.YEAR)
-            val month = cal.get(Calendar.MONTH) + 1
+            // getting details of the month before we move any further
+            val _month = calendar.get(Calendar.MONTH)
+            val _maxDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
 
-            // pad number of days
-            while (dayStartsAt >= 1) {
-                val model = DateItem(date = "-1", dateEnd = "-1", month = "-1", isClickable = false)
-                list.add(model)
-                dayStartsAt--
+            // this will be required to mark current day in the UI
+            val _originallySetDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+            // move the date back to start of the month to find out what day was 1 on
+            // eg: September 1, 2020 was on Thursday ( 3 )
+            calendar.set(Calendar.DAY_OF_MONTH, 1)
+
+            // here we will get that Thursday ( 3 ); but only 3 for the constant THURSDAY
+            val _dayStartOffset = calendar.get(Calendar.DAY_OF_WEEK)
+
+            log("we have _dayStartOffset : $_dayStartOffset")
+
+            // pad the number of days as offset fill -1 until the actual day starts
+            // but pad only if the day is greater than 1 i.e sunday ; else we will have an extra row
+            // can be improved to include previous month's details; but maybe later.
+            for (index in 1 until _dayStartOffset) {
+                val item = DateItem.getDefault()
+                list.add(item)
             }
 
-            for (day in firstDay until lastDay) {
-                val model = DateItem("$day", "$month", "$year")
-                list.add(model)
+            // today
+            val thisYear = mThisMonth.get(Calendar.YEAR)
+            val thisMonth = mThisMonth.get(Calendar.MONTH)
+            val thisDay = mThisMonth.get(Calendar.DAY_OF_MONTH)
+
+            // we will calculate actual date and assign it
+            for (day in 1.._maxDays) {
+                val item = DateItem.getDefault()
+
+                item.date = day.toString()
+                item.year = _year.toString()
+                item.month = _month.toString()
+                item.isClickable = true
+
+                if ((_originallySetDayOfMonth == day)
+                        .and(_year == thisYear)
+                        .and(_month == thisMonth)
+                ) {
+                    item.isToday = true
+                }
+
+                list.add(item)
             }
+
+            ui.adMonth = months[_month]
+            ui.adYear = _year.toString()
 
             calendarData.postValue(list)
-
         }
+    }
+
+    private fun log(msg: String) {
+        Log.i("RVHEIGHT", msg)
     }
 
 }

@@ -2,9 +2,11 @@ package np.com.naveenniraula.ghadi.ui
 
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -45,9 +47,17 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
                 // check if there were any last cells
                 if (lastCellPosition != RecyclerView.NO_POSITION) {
-                    val lastCell = dataList[lastCellPosition] as DateItem
-                    lastCell.isSelected = false
-                    dataList[lastCellPosition]
+                    try {
+                        val lastCell = dataList[lastCellPosition] as DateItem
+                        lastCell.isSelected = false
+                        dataList[lastCellPosition]
+                    } catch (ex: IndexOutOfBoundsException) {
+                        // like the printed message this is non fatal.
+                        Log.e(
+                            "RVHEIGHT",
+                            "This is a non fatal crash. I have not handled the AD / BS toggle properly."
+                        )
+                    }
                 }
 
                 val currentCell = dataList[vh.adapterPosition] as DateItem
@@ -59,10 +69,23 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
                 // this is the last position
                 lastCellPosition = vh.adapterPosition
+
+                // check if current cell is ad date
+                if (currentCell.isAd()) {
+                    currentCell.adDate = currentCell.date
+                    currentCell.adYear = currentCell.year
+                    currentCell.adMonth = currentCell.month
+                }
+                Log.i("RVHEIGHT", "$currentCell")
+
                 selectedDate = currentCell
             }
         }
         return vh
+    }
+
+    fun adBsToggled() {
+        lastCellPosition = Adapter.NO_SELECTION
     }
 
     fun getSelectedDate(): DateItem {
@@ -77,6 +100,30 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
                 adDate = tempDate.get(Calendar.DAY_OF_MONTH).toString()
             }
         }
+
+        /*Log.i("RVHEIGHT","we have $selectedDate")
+
+        // adjustment for AD because we have integrated both AD and BS
+        if (selectedDate.isAd()) {
+            val nepDate = Date(
+                selectedDate.adYear.toInt(),
+                selectedDate.adMonth.toInt(),
+                selectedDate.adDate.toInt()
+            ).convertToNepali()
+            val totalDays = DateUtils.getNumDays(nepDate.year, nepDate.month)
+
+            // copy everything from BS to AD
+            selectedDate.adYear = selectedDate.year
+            selectedDate.adMonth = selectedDate.month
+            selectedDate.adDate = selectedDate.date
+
+            // fill in the nepali date details
+            selectedDate.year = nepDate.year.toString()
+            selectedDate.month = nepDate.month.toString()
+            selectedDate.date = nepDate.day.toString()
+            selectedDate.dateEnd = totalDays.toString()
+        }*/
+
         return selectedDate.apply {
             dateEnd = DateUtils.getNumDays(year.toInt(), month.toInt()).toString()
         }
@@ -133,6 +180,10 @@ class NepaliDateAdapter<T> : RecyclerView.Adapter<NepaliDateAdapter.Vh>() {
 
             // make clickable or un-clickable
             root.isClickable = di.isClickable
+
+            if (di.adDate == "-1" || di.adDate == di.date) {
+                engDate.visibility = View.GONE
+            }
 
             if (di.isToday) setTodayColor()
             else setNormalColor(di)

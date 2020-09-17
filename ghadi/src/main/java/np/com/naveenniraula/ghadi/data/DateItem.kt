@@ -1,12 +1,10 @@
 package np.com.naveenniraula.ghadi.data
 
-import android.text.TextUtils
-import android.util.Log
 import np.com.naveenniraula.ghadi.miti.Date
 import java.util.*
 
 data class DateItem(
-    val date: String,
+    var date: String,
     var dateEnd: String = "",
     var month: String = "",
     var year: String = "",
@@ -19,24 +17,25 @@ data class DateItem(
     var isHoliday: Boolean = false
 ) {
 
+    fun isAd(): Boolean {
+        return adDate == "-1" && adMonth == "-1" && adYear == "-1"
+    }
+
     override fun toString(): String {
-        val currentData =
-            String.format(
-                "{ date: %s, dateEnd: %s, month: %s, year: %s, adDate: %s, adMonth: %s, adYear: %s, isToday: %s, isSelected: %s, isClickable: %s, isHoliday: %s }",
-                date,
-                dateEnd,
-                month,
-                year,
-                adDate,
-                adMonth,
-                adYear,
-                isToday,
-                isSelected,
-                isClickable,
-                isHoliday
-            )
-        return currentData
-        // return "$year-$month-$date"
+        return String.format(
+            "{ date: %s, dateEnd: %s, month: %s, year: %s, adDate: %s, adMonth: %s, adYear: %s, isToday: %s, isSelected: %s, isClickable: %s, isHoliday: %s }",
+            date,
+            dateEnd,
+            month,
+            year,
+            adDate,
+            adMonth,
+            adYear,
+            isToday,
+            isSelected,
+            isClickable,
+            isHoliday
+        )
     }
 
     companion object {
@@ -55,6 +54,22 @@ data class DateItem(
                 isSelected = true,
                 isHoliday = false,
                 isToday = true
+            )
+        }
+
+        fun getDefault(): DateItem {
+            return DateItem(
+                date = "-1",
+                dateEnd = "-1",
+                month = "-1",
+                year = "-1",
+                adDate = "-1",
+                adMonth = "-1",
+                adYear = "-1",
+                isToday = false,
+                isSelected = false,
+                isClickable = false,
+                isHoliday = false
             )
         }
     }

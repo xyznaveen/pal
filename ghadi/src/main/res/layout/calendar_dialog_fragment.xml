@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
 
         <variable
                 name="ui"
@@ -9,11 +13,9 @@
 
     </data>
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+    <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/gpfRoot"
@@ -22,9 +24,11 @@
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                     android:id="@+id/materialButtonToggleGroup"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     app:checkedButton="@id/btn2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -35,24 +39,44 @@
                 <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn1"
                         style="?attr/materialButtonOutlinedStyle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="AD" />
 
                 <com.google.android.material.button.MaterialButton
                         android:id="@+id/btn2"
                         style="?attr/materialButtonOutlinedStyle"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="BS" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <RelativeLayout
+                    android:id="@+id/progress_bar_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="300dp"
+                    android:visibility="@{ui.calculating ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/gpfMonth">
+
+                <ProgressBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:indeterminate="true" />
+
+            </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/nepaliDateList"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginTop="8dp"
+                    android:visibility="@{ui.calculating ? View.GONE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gpfMonth"
@@ -67,6 +91,7 @@
                     android:layout_height="0dp"
                     android:elevation="4dp"
                     android:padding="8dp"
+                    android:visibility="@{ui.calculating ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toTopOf="@+id/gpfMonth"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/gpfYear"
@@ -79,6 +104,7 @@
                     android:layout_height="0dp"
                     android:elevation="4dp"
                     android:padding="8dp"
+                    android:visibility="@{ui.calculating ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toTopOf="@+id/gpfPrevMonth"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/gpfPrevYear"
@@ -92,6 +118,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:padding="8dp"
+                    android:text="@{ui.bs ? ui.bsYear : ui.adYear}"
                     android:textAlignment="center"
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -107,6 +134,7 @@
                     android:layout_height="0dp"
                     android:elevation="4dp"
                     android:padding="8dp"
+                    android:visibility="@{ui.calculating ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toBottomOf="@+id/gpfPrevMonth"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gpfYear"
@@ -119,6 +147,7 @@
                     android:layout_height="0dp"
                     android:elevation="4dp"
                     android:padding="8dp"
+                    android:visibility="@{ui.calculating ? View.GONE : View.VISIBLE}"
                     app:layout_constraintBottom_toTopOf="@+id/nepaliDateList"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/gpfYear"
@@ -132,6 +161,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:padding="6dp"
+                    android:text="@{ui.bs ? ui.bsMonth : ui.adMonth }"
                     android:textAllCaps="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -144,15 +174,15 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="16dp"
                     android:text="Cancel"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/gpfConfirm"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/nepaliDateList" />
+                    app:layout_constraintTop_toBottomOf="@+id/progress_barrier" />
 
             <View
                     android:id="@+id/view"
@@ -178,6 +208,14 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/gpfCancel"
                     app:layout_constraintTop_toTopOf="@+id/gpfCancel" />
+
+            <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/progress_barrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="progress_bar_parent,nepaliDateList"
+                    tools:layout_editor_absoluteY="452dp" />
 
             <!--END: Action Buttons -->
 
