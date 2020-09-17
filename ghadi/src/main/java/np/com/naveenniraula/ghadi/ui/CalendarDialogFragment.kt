@@ -231,9 +231,14 @@ class CalendarDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
-            mBinding.ui!!.bsYear = ConversionUtil.toNepali(yearNumber.toString()) ?: ""
-            changeDate(Date(yearNumber, upcomingMonthNumber, 1))
+            if (!viewModel.ui.isBs) {
+                viewModel.currentEnglishDate.year -= 1
+                changeDate(null)
+            } else {
+                val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
+                mBinding.ui!!.bsYear = ConversionUtil.toNepali(yearNumber.toString()) ?: ""
+                changeDate(Date(yearNumber, upcomingMonthNumber, 1))
+            }
         }
         yNext.setOnClickListener {
 
@@ -249,10 +254,14 @@ class CalendarDialogFragment : DialogFragment() {
                 return@setOnClickListener
             }
 
-            val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
-            mBinding.ui!!.bsYear = ConversionUtil.toNepali(yearNumber.toString()) ?: ""
-
-            changeDate(Date(yearNumber, upcomingMonthNumber, 1))
+            if (!viewModel.ui.isBs) {
+                viewModel.currentEnglishDate.year += 1
+                changeDate(null)
+            } else {
+                val upcomingMonthNumber = DateUtils.getMonthNumber(getDisplayedMonth())
+                mBinding.ui!!.bsYear = ConversionUtil.toNepali(yearNumber.toString()) ?: ""
+                changeDate(Date(yearNumber, upcomingMonthNumber, 1))
+            }
         }
 
         // -----------------------
